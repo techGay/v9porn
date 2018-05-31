@@ -5,5 +5,5 @@
   "noticeTime": "2018年2月5日",
    "noticeTitle": "公告",
    "noticeer": "Adimn",
-   "versionCode": 1
+   "versionCode": 0
  }

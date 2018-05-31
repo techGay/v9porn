@@ -15,12 +15,15 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.HttpUrl;
+
 /**
  * @author flymegoc
  * @date 2018/2/1
  */
 
 public class Parse99Mm {
+
     private static final String TAG = Parse99Mm.class.getSimpleName();
 
     public static BaseResult<List<Mm99>> parse99MmList(String html, int page) {
@@ -51,6 +54,11 @@ public class Parse99Mm {
             String title = img.attr("alt");
             mm99.setTitle(title);
             String imgUrl = img.attr("src");
+            HttpUrl httpUrl = HttpUrl.parse(imgUrl);
+            if (httpUrl == null) {
+                imgUrl = img.attr("data-img");
+            }
+            Logger.t(TAG).d("图片链接::" + imgUrl);
             mm99.setImgUrl(imgUrl);
             int imgWidth = Integer.parseInt(img.attr("width"));
             mm99.setImgWidth(imgWidth);
@@ -72,5 +80,26 @@ public class Parse99Mm {
 
         baseResult.setData(mm99List);
         return baseResult;
+    }
+
+    public static List<String> parse99MmImageList(String html) {
+
+        Document doc = Jsoup.parse(html);
+        Element element = doc.body().select("script").first();
+        String javaScript = element.toString();
+        String data = StringUtils.subString(javaScript, javaScript.indexOf("'") + 1, javaScript.lastIndexOf(";") - 1);
+        String[] ids = data.split("%");
+        Logger.t(TAG).d(ids);
+
+        String[] jmImgUrl = {"img", "file"};
+
+        List<String> stringImageList = new ArrayList<>();
+        for (int i = 8; i < ids.length; i++) {
+            String jmPicUrl = "http://" + jmImgUrl[Integer.parseInt(ids[1])] + ".99mm.net/" + ids[4] + "/" + ids[5] + "/" + (i - 7) + "-" + ids[i].toLowerCase()+".jpg";
+            Logger.t(TAG).d(jmPicUrl);
+            stringImageList.add(jmPicUrl);
+        }
+        return stringImageList;
+
     }
 }

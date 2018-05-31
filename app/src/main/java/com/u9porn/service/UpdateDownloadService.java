@@ -22,6 +22,7 @@ import com.u9porn.BuildConfig;
 import com.u9porn.R;
 import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.constants.Constants;
+import com.u9porn.utils.NotificationChannelHelper;
 
 import java.io.File;
 
@@ -39,7 +40,6 @@ public class UpdateDownloadService extends Service {
     private static final int ACTION_CANCEL = 3;
     private static final String TAG = UpdateDownloadService.class.getSimpleName();
     private int progress = 1;
-    private int id = Constants.APK_DOWNLOAD_NOTIFICATION_ID;
     private int downloadId;
     private String path;
     private UpdateVersion updateVersion;
@@ -88,7 +88,7 @@ public class UpdateDownloadService extends Service {
                 return START_NOT_STICKY;
             }
         }
-        path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + "/91porn_" + updateVersion.getVersionName() + ".apk";
+        path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + "/v9porn_" + updateVersion.getVersionName() + ".apk";
         if (BuildConfig.DEBUG) {
             File file = new File(path);
             file.delete();
@@ -109,7 +109,7 @@ public class UpdateDownloadService extends Service {
 
             @Override
             protected void completed(BaseDownloadTask task) {
-                isPause=false;
+                isPause = false;
                 installApk(path);
                 stopForeground(true);
             }
@@ -149,7 +149,7 @@ public class UpdateDownloadService extends Service {
         File file = new File(path);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(getApplicationContext(), "com.u91porn.fileprovider", file);
+            uri = FileProvider.getUriForFile(getApplicationContext(), "com.u9porn.fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }
@@ -163,7 +163,7 @@ public class UpdateDownloadService extends Service {
 
     private void startNotification(int action, int progress, String fileSize, int speed) {
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, String.valueOf(id));
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelHelper.CHANNEL_ID_FOR_UPDATE);
         builder.setContentTitle("正在下载");
         builder.setSmallIcon(R.mipmap.ic_launcher_round);
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_download_apk);
@@ -191,6 +191,7 @@ public class UpdateDownloadService extends Service {
 
         builder.setContent(remoteViews);
         Notification notification = builder.build();
+        int id = Constants.APK_DOWNLOAD_NOTIFICATION_ID;
         startForeground(id, notification);
     }
 

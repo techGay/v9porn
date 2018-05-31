@@ -310,10 +310,24 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         autoCompleteTextView.setText(testBaseUrl);
         if (!TextUtils.isEmpty(testBaseUrl)) {
             autoCompleteTextView.setSelection(testBaseUrl.length());
+        } else {
+            switch (key) {
+                case AppPreferencesHelper.KEY_SP_PORN_91_VIDEO_ADDRESS:
+                    autoCompleteTextView.setText(presenter.getVideo9PornAddress());
+                    break;
+                case AppPreferencesHelper.KEY_SP_FORUM_91_PORN_ADDRESS:
+                    autoCompleteTextView.setText(presenter.getForum9PornAddress());
+                    break;
+                case AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS:
+                    autoCompleteTextView.setText(presenter.getPavAddress());
+                    break;
+                default:
+            }
         }
         final String[] address = {"http://", "https://", "http://www.", "https://www."};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_auto_complete_textview, address);
         autoCompleteTextView.setAdapter(adapter);
+
         okAppCompatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -369,7 +383,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     /**
      * 刷新为原地址或者最新地址
      *
-     * @param key           key
+     * @param key key
      */
     private void resetOrUpdateAddress(String key) {
         switch (key) {

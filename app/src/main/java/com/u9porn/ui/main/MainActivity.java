@@ -48,6 +48,7 @@ import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.ApkVersionUtils;
 import com.u9porn.utils.FragmentUtils;
+import com.u9porn.utils.NotificationChannelHelper;
 import com.u9porn.utils.SDCardUtils;
 import com.u9porn.constants.Constants;
 import com.u9porn.constants.Keys;
@@ -111,6 +112,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NotificationChannelHelper.initChannel(this);
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         fragmentManager = getSupportFragmentManager();
@@ -505,7 +507,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             FileDownloader.getImpl().pauseAll();
             FileDownloader.getImpl().unBindService();
             //没啥意义
-            if (!existActivityWithAnimation) {
+            if (!existActivityWithAnimation && !isFinishing()) {
                 super.onBackPressed();
             }
             finishAffinity();

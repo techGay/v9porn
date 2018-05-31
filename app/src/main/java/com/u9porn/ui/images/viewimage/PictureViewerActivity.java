@@ -100,7 +100,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
         }
         Mm99 mm99 = (Mm99) getIntent().getSerializableExtra(Keys.KEY_INTENT_99_MM_ITEM);
         if (mm99 != null) {
-            presenter.list99MmPicture(mm99.getId(), mm99.getImgUrl(), false);
+            presenter.list99MmPicture(mm99.getId(), mm99.getContentUrl(), false);
         }
     }
 
@@ -190,7 +190,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
     private void notifySystemGallery(File file) {
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.u91porn.fileprovider", file);
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.u9porn.fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }

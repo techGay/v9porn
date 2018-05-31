@@ -176,7 +176,12 @@ public class ProxySettingActivity extends MvpActivity<ProxyView, ProxyPresenter>
         }
         presenter.exitTest();
         String proxyIpAddress = etDialogProxySettingIpAddress.getIpAddressStr();
-        int proxyPort = Integer.parseInt(etDialogProxySettingPort.getText().toString());
+        String proxyPortStr = etDialogProxySettingPort.getText().toString().trim();
+        if (TextUtils.isEmpty(proxyPortStr) || !TextUtils.isDigitsOnly(proxyPortStr)) {
+            showMessage("无法设置，代理端口错误，请检查", TastyToast.INFO);
+            return;
+        }
+        int proxyPort = Integer.parseInt(proxyPortStr);
         //设置开启代理并存储地址和端口号
         presenter.setOpenHttpProxy(true);
         presenter.setProxyIpAddress(proxyIpAddress);

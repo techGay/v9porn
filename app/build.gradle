@@ -8,8 +8,8 @@ android {
         applicationId "com.u9porn"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

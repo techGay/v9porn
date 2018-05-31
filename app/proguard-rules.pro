@@ -197,8 +197,8 @@
 }
 
 ## 保持自定义实体类不被混淆
--keep class com.u91porn.data.model.** { *; }
-
+-keep class com.u9porn.data.model.** { *; }
+-keep class com.u9porn.data.db.** { *; }
 ## greenDao ##
 -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
 public static java.lang.String TABLENAME;

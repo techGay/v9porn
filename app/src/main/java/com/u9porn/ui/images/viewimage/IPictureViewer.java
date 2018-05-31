@@ -8,5 +8,5 @@ package com.u9porn.ui.images.viewimage;
 
 public interface IPictureViewer {
     void listMeZiPicture(int id,boolean pullToRefresh);
-    void list99MmPicture(int id,String imageUrl,boolean pullToRefresh);
+    void list99MmPicture(int id,String contentUrl,boolean pullToRefresh);
 }

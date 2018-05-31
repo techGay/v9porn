@@ -18,6 +18,7 @@ import com.u9porn.di.component.DaggerServiceComponent;
 import com.u9porn.ui.download.DownloadActivity;
 import com.u9porn.utils.DownloadManager;
 import com.u9porn.constants.Constants;
+import com.u9porn.utils.NotificationChannelHelper;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class DownloadVideoService extends Service implements DownloadManager.Dow
 
     private void startNotification(String videoName, int progress, String fileSize, int speed) {
         int id = Constants.VIDEO_DOWNLOAD_NOTIFICATION_ID;
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, String.valueOf(id));
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelHelper.CHANNEL_ID_FOR_DOWNLOAD);
         builder.setContentTitle("正在下载");
         builder.setSmallIcon(R.mipmap.ic_launcher_round);
         builder.setProgress(100, progress, false);

@@ -19,6 +19,11 @@ public class VideoCacheFileNameGenerator implements FileNameGenerator {
     public String generate(String url) {
         int startIndex = url.lastIndexOf("/");
         int endIndex = url.indexOf(".mp4");
-        return url.substring(startIndex, endIndex) + ".temp";
+        try {
+            return url.substring(startIndex, endIndex) + ".temp";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return url + ".temp";
+        }
     }
 }

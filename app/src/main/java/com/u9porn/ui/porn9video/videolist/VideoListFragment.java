@@ -184,6 +184,10 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
         skipPageRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
+                //异步，可能点击太快会导致视图已经销毁了
+                if (skipPageRecyclerView == null) {
+                    return;
+                }
                 skipPageRecyclerView.smoothScrollToPosition(currentPage + 2);
             }
         }, 200);

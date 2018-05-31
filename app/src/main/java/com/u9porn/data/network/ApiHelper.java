@@ -70,7 +70,7 @@ public interface ApiHelper {
 
     Observable<BaseResult<List<Mm99>>> list99Mm(String category, int page, boolean cleanCache);
 
-    Observable<List<String>> mm99ImageList(int id, String imageUrl, boolean pullToRefresh);
+    Observable<List<String>> mm99ImageList(int id, String contentUrl, boolean pullToRefresh);
 
     Observable<List<PavModel>> loadPavListByCategory(String category, boolean pullToRefresh);
 
