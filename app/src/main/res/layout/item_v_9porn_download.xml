@@ -11,6 +11,7 @@
     app:contentPadding="1dp">
 
     <RelativeLayout
+        android:id="@+id/layout_download_item"
         android:layout_width="match_parent"
         android:layout_height="90dp">
 

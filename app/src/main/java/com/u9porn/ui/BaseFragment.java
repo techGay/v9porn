@@ -2,15 +2,17 @@ package com.u9porn.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.MyApplication;
 import com.u9porn.R;
+import com.u9porn.constants.Keys;
 import com.u9porn.data.db.entity.Category;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.di.component.ActivityComponent;
@@ -19,7 +21,6 @@ import com.u9porn.di.module.ActivityModule;
 import com.u9porn.ui.main.MainActivity;
 import com.u9porn.ui.porn9video.play.BasePlayVideo;
 import com.u9porn.utils.PlaybackEngine;
-import com.u9porn.constants.Keys;
 
 /**
  * @author flymegoc
@@ -184,5 +185,31 @@ public abstract class BaseFragment extends Fragment {
 
     protected void showMessage(String msg, int type) {
         TastyToast.makeText(context.getApplicationContext(), msg, TastyToast.LENGTH_SHORT, type).show();
+    }
+
+    /**
+     * 展示一个可以选择的dialog
+     *
+     * @param msg    title
+     * @param checks 可以选择的条目
+     * @param check  回调
+     */
+    protected void showDialog(String msg, String[] checks, @NonNull final DialogCheck check) {
+        final QMUIDialog.CheckableDialogBuilder builder = new QMUIDialog.CheckableDialogBuilder(this.getContext());
+        QMUIDialog dialog;
+        builder.setTitle(msg);
+        builder.addItems(checks, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                check.onCheck(builder.getCheckedIndex());
+                dialog.dismiss();
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+    }
+
+    protected interface DialogCheck {
+        void onCheck(int index);
     }
 }

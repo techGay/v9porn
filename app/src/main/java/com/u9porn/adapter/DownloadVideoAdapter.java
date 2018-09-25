@@ -72,5 +72,6 @@ public class DownloadVideoAdapter extends BaseQuickAdapter<V9PornItem, BaseViewH
         }
         helper.addOnClickListener(R.id.iv_download_control);
         helper.addOnClickListener(R.id.right_menu_delete);
+        helper.addOnClickListener(R.id.layout_download_item);
     }
 }
