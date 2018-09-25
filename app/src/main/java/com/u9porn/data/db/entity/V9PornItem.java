@@ -114,10 +114,10 @@ public class V9PornItem implements Serializable {
     public String getDownLoadPath(String customDownloadVideoDirPath) {
         //先读取自定义目录
         if (!TextUtils.isEmpty(customDownloadVideoDirPath)) {
-            return customDownloadVideoDirPath + getViewKey() + ".mp4";
+            return customDownloadVideoDirPath + getTitle() + getViewKey() + ".mp4";
         }
 
-        return SDCardUtils.DOWNLOAD_VIDEO_PATH + getViewKey() + ".mp4";
+        return SDCardUtils.DOWNLOAD_VIDEO_PATH + getTitle() + getViewKey() + ".mp4";
     }
 
     public Date getAddDownloadDate() {
