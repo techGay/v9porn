@@ -111,8 +111,8 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
 
         mDownloadAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                V9PornItem v9PornItem = (V9PornItem) adapter.getItem(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, final View view, int position) {
+                final V9PornItem v9PornItem = (V9PornItem) adapter.getItem(position);
                 if (v9PornItem == null) {
                     return;
                 }
@@ -122,23 +122,35 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
                     swipeItemLayout.close();
                     presenter.deleteDownloadingTask(v9PornItem);
                     presenter.loadDownloadingData();
+                } else if (view.getId() == R.id.layout_download_item) {
+                    goToPlayVideo(v9PornItem, presenter.getPlaybackEngine(), 0, 0);
                 } else if (view.getId() == R.id.iv_download_control) {
                     if (FileDownloader.getImpl().isServiceConnected()) {
                         if (v9PornItem.getStatus() == FileDownloadStatus.progress) {
                             FileDownloader.getImpl().pause(v9PornItem.getDownloadId());
                             ((ImageView) view).setImageResource(R.drawable.start_download);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.warn) {
-                            startDownload(v9PornItem, view, true);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.paused) {
-                            startDownload(v9PornItem, view, false);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.error) {
-                            startDownload(v9PornItem, view, false);
+                        } else {
+                            showDownloadCheck(v9PornItem, view);
                         }
                     }
                 }
             }
         });
+    }
 
+    /**
+     * 让使用者自己选择是重新下载还是继续下载
+     *
+     * @param v9PornItem 需要下载的视频信息
+     * @param view       需要更新的view
+     */
+    private void showDownloadCheck(final V9PornItem v9PornItem, final View view) {
+        showDialog("请选择下载方式", new String[]{"继续下载", "重新下载"}, new DialogCheck() {
+            @Override
+            public void onCheck(int index) {
+                startDownload(v9PornItem, view, index != 0);
+            }
+        });
     }
 
     @Override

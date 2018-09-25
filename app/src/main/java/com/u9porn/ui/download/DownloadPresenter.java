@@ -382,6 +382,10 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
                 });
     }
 
+    public int getPlaybackEngine(){
+        return dataManager.getPlaybackEngine();
+    }
+
     public interface DownloadListener {
         void onSuccess(String message);
 
