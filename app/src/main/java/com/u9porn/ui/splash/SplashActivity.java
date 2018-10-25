@@ -71,7 +71,6 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
     @NonNull
     @Override
     public SplashPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return splashPresenter;
     }
 

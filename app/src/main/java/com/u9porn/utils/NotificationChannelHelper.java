@@ -22,11 +22,11 @@ public class NotificationChannelHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = CHANNEL_ID_FOR_DOWNLOAD;
             String channelName = "视频下载";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
             createNotificationChannel(context, channelId, channelName, importance);
             channelId = CHANNEL_ID_FOR_UPDATE;
             channelName = "应用升级";
-            importance = NotificationManager.IMPORTANCE_DEFAULT;
+            importance = NotificationManager.IMPORTANCE_LOW;
             createNotificationChannel(context, channelId, channelName, importance);
         }
     }

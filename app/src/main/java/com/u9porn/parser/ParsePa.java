@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.u9porn.data.model.BaseResult;
-import com.u9porn.data.model.PavModel;
-import com.u9porn.data.model.PavVideoParserJsonResult;
+import com.u9porn.data.model.pxgav.PavModel;
+import com.u9porn.data.model.pxgav.PavVideoParserJsonResult;
 import com.u9porn.utils.StringUtils;
 
 import org.jsoup.Jsoup;

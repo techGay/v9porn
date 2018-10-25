@@ -69,7 +69,6 @@ public class HistoryActivity extends MvpActivity<HistoryView, HistoryPresenter> 
     @NonNull
     @Override
     public HistoryPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return historyPresenter;
     }
 

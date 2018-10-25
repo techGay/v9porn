@@ -10,5 +10,6 @@ public class KeysActivityRequestResultCode {
 
     public static final int RESULT_CODE_FOR_REFRESH_GET_UID = 4;
 
-    public static final int AUTHOR_ACTIVITY_RESULT_CODE = 5;
+    public static final int LOGIN_ACTION_FOR_LOOK_AUTHOR_VIDEO = 5;
+    public static final int RESULT_FOR_LOOK_AUTHOR_VIDEO = 6;
 }

@@ -23,7 +23,6 @@ import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.DownloadVideoAdapter;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.service.DownloadVideoService;
 import com.u9porn.ui.MvpFragment;
@@ -92,7 +91,6 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
     @NonNull
     @Override
     public DownloadPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return downloadPresenter;
 
     }
@@ -109,10 +107,17 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
         recyclerView.setAdapter(mDownloadAdapter);
         mDownloadAdapter.setEmptyView(R.layout.empty_view, recyclerView);
 
+        mDownloadAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                goToPlayVideo((V9PornItem) adapter.getItem(position), presenter.getPlaybackEngine(), 0, 0);
+            }
+        });
+
         mDownloadAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                V9PornItem v9PornItem = (V9PornItem) adapter.getItem(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, final View view, int position) {
+                final V9PornItem v9PornItem = (V9PornItem) adapter.getItem(position);
                 if (v9PornItem == null) {
                     return;
                 }
@@ -127,18 +132,28 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
                         if (v9PornItem.getStatus() == FileDownloadStatus.progress) {
                             FileDownloader.getImpl().pause(v9PornItem.getDownloadId());
                             ((ImageView) view).setImageResource(R.drawable.start_download);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.warn) {
-                            startDownload(v9PornItem, view, true);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.paused) {
-                            startDownload(v9PornItem, view, false);
-                        } else if (v9PornItem.getStatus() == FileDownloadStatus.error) {
-                            startDownload(v9PornItem, view, false);
+                        } else {
+                            showDownloadCheck(v9PornItem, view);
                         }
                     }
                 }
             }
         });
+    }
 
+    /**
+     * 让使用者自己选择是重新下载还是继续下载
+     *
+     * @param v9PornItem 需要下载的视频信息
+     * @param view       需要更新的view
+     */
+    private void showDownloadCheck(final V9PornItem v9PornItem, final View view) {
+        showDialog("请选择下载方式", new String[]{"继续下载", "重新下载"}, new DialogCheck() {
+            @Override
+            public void onCheck(int index) {
+                startDownload(v9PornItem, view, index != 0);
+            }
+        });
     }
 
     @Override
@@ -161,7 +176,7 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 

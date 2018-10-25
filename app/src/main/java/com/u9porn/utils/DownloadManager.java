@@ -1,7 +1,5 @@
 package com.u9porn.utils;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
@@ -16,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Inject;
-
 
 /**
  * @author flymegoc
@@ -27,11 +23,11 @@ import javax.inject.Inject;
 
 public class DownloadManager {
     private static final String TAG = DownloadManager.class.getSimpleName();
-    @Inject
+
     protected DataManager dataManager;
 
     private DownloadManager() {
-        MyApplication.getInstance().getApplicationComponent().inject(this);
+        dataManager = MyApplication.getInstance().getDataManager();
     }
 
     private final static class HolderClass {
@@ -141,7 +137,7 @@ public class DownloadManager {
             //不存在的任务清除掉
             FileDownloader.getImpl().clear(task.getId(), task.getPath());
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable(TAG + "::save download info failure:" + task.getUrl()), Severity.WARNING);
+              //  Bugsnag.notify(new Throwable(TAG + "::save download info failure:" + task.getUrl()), Severity.WARNING);
             }
             return;
         }

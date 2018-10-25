@@ -1,7 +1,5 @@
 package com.u9porn.data.db;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.liulishuo.filedownloader.model.FileDownloadStatus;
 import com.u9porn.BuildConfig;
@@ -40,11 +38,13 @@ public class AppDbHelper implements DbHelper {
         initCategory(Category.TYPE_MEI_ZI_TU, Category.CATEGORY_DEFAULT_MEI_ZI_TU_VALUE, Category.CATEGORY_DEFAULT_MEI_ZI_TU_NAME);
         initCategory(Category.TYPE_PIG_AV, Category.CATEGORY_DEFAULT_PIG_AV_VALUE, Category.CATEGORY_DEFAULT_PIG_AV_NAME);
         initCategory(Category.TYPE_99_MM, Category.CATEGORY_DEFAULT_99_MM_VALUE, Category.CATEGORY_DEFAULT_99_MM_NAME);
+        initCategory(Category.TYPE_HUA_BAN, null, Category.CATEGORY_DEFAULT_HUA_BAN_NAME);
+        initCategory(Category.TYPE_AXGLE, Category.CATEGORY_DEFAULT_AXGLE_VALUE, Category.CATEGORY_DEFAULT_AXGLE_NAME);
     }
 
     @Override
     public void initCategory(int type, String[] value, String[] name) {
-        int length = value.length;
+        int length = name.length;
         List<Category> categoryList = mDaoSession.getCategoryDao().queryBuilder().where(CategoryDao.Properties.CategoryType.eq(type)).build().list();
         if (categoryList.size() == length) {
             return;
@@ -52,7 +52,12 @@ public class AppDbHelper implements DbHelper {
         for (int i = 0; i < length; i++) {
             Category category = new Category();
             category.setCategoryName(name[i]);
-            category.setCategoryValue(value[i]);
+            if (value == null) {
+                category.setCategoryValue(String.valueOf(i + 1));
+            } else {
+                category.setCategoryValue(value[i]);
+            }
+
             category.setCategoryType(type);
             category.setIsShow(true);
             category.setSortId(i);
@@ -104,7 +109,7 @@ public class AppDbHelper implements DbHelper {
                 v9PornItemDao.delete(v9PornItem);
             }
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable("findV9PornItemDaoByViewKey DaoException", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable("findV9PornItemDaoByViewKey DaoException", e), Severity.WARNING);
             }
             e.printStackTrace();
         }
@@ -118,7 +123,7 @@ public class AppDbHelper implements DbHelper {
         } catch (Exception e) {
             //暂时先不处理这问题了，理论上一个不会发生，因为时根据url生成
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable("findV9PornItemDaoByDownloadId DaoException", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable("findV9PornItemDaoByDownloadId DaoException", e), Severity.WARNING);
             }
             e.printStackTrace();
         }

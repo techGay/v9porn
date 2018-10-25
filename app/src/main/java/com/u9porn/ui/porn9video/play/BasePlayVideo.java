@@ -5,27 +5,21 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.rubensousa.floatingtoolbar.FloatingToolbar;
 import com.helper.loadviewhelper.help.OnLoadViewListener;
 import com.helper.loadviewhelper.load.LoadViewHelper;
@@ -35,19 +29,21 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
-import com.u9porn.adapter.VideoCommentAdapter;
+import com.u9porn.adapter.PlayFragmentAdapter;
+import com.u9porn.constants.Keys;
 import com.u9porn.constants.KeysActivityRequestResultCode;
+import com.u9porn.data.db.entity.Category;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
-import com.u9porn.data.model.VideoComment;
 import com.u9porn.service.DownloadVideoService;
 import com.u9porn.ui.MvpActivity;
-import com.u9porn.ui.porn9video.author.AuthorActivity;
+import com.u9porn.ui.porn9video.author.AuthorFragment;
+import com.u9porn.ui.porn9video.comment.CommentFragment;
+import com.u9porn.ui.porn9video.index.IndexFragment;
 import com.u9porn.ui.porn9video.user.UserLoginActivity;
-import com.u9porn.utils.AppUtils;
+import com.u9porn.ui.porn9video.videolist.VideoListFragment;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.LoadHelperUtils;
-import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,8 +61,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     private final String TAG = BasePlayVideo.class.getSimpleName();
 
-    @BindView(R.id.recyclerView_video_comment)
-    RecyclerView recyclerViewVideoComment;
     @BindView(R.id.floatingToolbar)
     FloatingToolbar floatingToolbar;
     @BindView(R.id.fab)
@@ -84,31 +78,34 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     @BindView(R.id.coordinator)
     CoordinatorLayout coordinator;
 
-    @BindView(R.id.et_video_comment)
-    AppCompatEditText etVideoComment;
-    @BindView(R.id.iv_video_comment_send)
-    ImageView ivVideoCommentSend;
-    @BindView(R.id.et_comment_input_layout)
-    LinearLayout etCommentInputLayout;
-    @BindView(R.id.comment_swipeRefreshLayout)
-    SwipeRefreshLayout commentSwipeRefreshLayout;
-    @BindView(R.id.user_info_layout)
-    ConstraintLayout userInfoLayout;
     @BindView(R.id.video_player_container)
     FrameLayout videoPlayerContainer;
+    @BindView(R.id.tab_play)
+    TabLayout tabPlay;
+    @BindView(R.id.viewPager_play)
+    ViewPager viewPagerPlay;
 
     private AlertDialog mAlertDialog;
     private AlertDialog favoriteDialog;
-    private AlertDialog commentVideoDialog;
 
     private LoadViewHelper helper;
 
     protected V9PornItem v9PornItem;
 
-    private VideoCommentAdapter videoCommentAdapter;
-    private boolean isVideoError = true;
-    private boolean isComment = true;
-    private VideoComment videoComment;
+    protected Category category;
+
+    protected int skipPage;
+
+    protected int position;
+
+    @Inject
+    protected CommentFragment commentFragment;
+
+    @Inject
+    protected AuthorFragment authorFragment;
+
+    @Inject
+    protected PlayFragmentAdapter playFragmentAdapter;
 
     @Inject
     protected PlayVideoPresenter playVideoPresenter;
@@ -119,15 +116,49 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         setContentView(R.layout.activity_base_play_video);
         ButterKnife.bind(this);
         initPlayerView();
-        v9PornItem = (V9PornItem) getIntent().getSerializableExtra(Keys.KEY_INTENT_V9PORN_ITEM);
-
-        initListener();
+        initIntentData();
         initDialog();
         initLoadHelper();
-        initVideoComments();
         initData();
         initBottomMenu();
 
+        initTab();
+    }
+
+    private void initIntentData() {
+        v9PornItem = (V9PornItem) getIntent().getSerializableExtra(Keys.KEY_INTENT_V9PORN_ITEM);
+        category = (Category) getIntent().getSerializableExtra(Keys.KEY_INTENT_CATEGORY_ITEM);
+        skipPage = getIntent().getIntExtra(Keys.KEY_INTENT_SKIP_PAGE, 0);
+        position = getIntent().getIntExtra(Keys.KEY_INTENT_SCROLL_TO_POSITION, 0);
+    }
+
+    /**
+     * 底部切换标签tab
+     */
+    private void initTab() {
+        List<Fragment> fragments = new ArrayList<>();
+        fragments.add(commentFragment);
+        if (category != null) {
+            if ("index".equalsIgnoreCase(category.getCategoryValue())) {
+                IndexFragment indexFragment = IndexFragment.getInstance();
+                indexFragment.setCategory(category);
+                indexFragment.setPosition(position);
+                fragments.add(indexFragment);
+            } else {
+                VideoListFragment videoListFragment = VideoListFragment.getInstance();
+                videoListFragment.setCategory(category);
+                videoListFragment.setSkipPage(skipPage);
+                videoListFragment.setPosition(position);
+                fragments.add(videoListFragment);
+            }
+        }else {
+            //TODO
+        }
+
+        fragments.add(authorFragment);
+        playFragmentAdapter.setData(fragments);
+        viewPagerPlay.setAdapter(playFragmentAdapter);
+        tabPlay.setupWithViewPager(viewPagerPlay);
     }
 
     /**
@@ -135,76 +166,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
      */
     public abstract void initPlayerView();
 
-    private void initListener() {
-        ivVideoCommentSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String comment = etVideoComment.getText().toString().trim();
-                commentOrReplyVideo(comment);
-            }
-        });
-        commentSwipeRefreshLayout.setEnabled(false);
-        AppUtils.setColorSchemeColors(this, commentSwipeRefreshLayout);
-        commentSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (v9PornItem.getVideoResultId() == 0) {
-                    commentSwipeRefreshLayout.setRefreshing(false);
-                    return;
-                }
-                String videoId = v9PornItem.getVideoResult().getVideoId();
-                presenter.loadVideoComment(videoId, v9PornItem.getViewKey(), true);
-            }
-        });
-        userInfoLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isComment = true;
-                videoCommentAdapter.setClickPosition(-1);
-                videoCommentAdapter.notifyDataSetChanged();
-                etVideoComment.setHint(R.string.comment_video_hint_tip);
-            }
-        });
-    }
-
-    /**
-     * 评论视频或者回复评论
-     *
-     * @param comment 留言内容
-     */
-    private void commentOrReplyVideo(String comment) {
-        if (TextUtils.isEmpty(comment)) {
-            showMessage("请填写评论", TastyToast.INFO);
-            return;
-        }
-
-        if (!presenter.isUserLogin()) {
-            showMessage("请先登录帐号", TastyToast.INFO);
-            goToLogin(KeysActivityRequestResultCode.LOGIN_ACTION_FOR_GET_UID);
-            return;
-        }
-        if (v9PornItem.getVideoResultId() == 0) {
-            showMessage("视频地址还未解析成功，无法评论", TastyToast.INFO);
-            return;
-        }
-        String vid = v9PornItem.getVideoResult().getVideoId();
-        String uid = String.valueOf(presenter.getLoginUserId());
-        if (isComment) {
-            commentVideoDialog.show();
-            presenter.commentVideo(comment, uid, vid, v9PornItem.getViewKey());
-        } else {
-            if (videoComment == null) {
-                showMessage("请先选择需要回复的评论！", TastyToast.INFO);
-                return;
-            }
-            commentVideoDialog.show();
-            String username = videoComment.getuName();
-            String commentId = videoComment.getReplyId();
-            presenter.replyComment(comment, username, vid, commentId, v9PornItem.getViewKey());
-        }
-    }
-
-    private void initData() {
+    public void initData() {
         V9PornItem tmp = presenter.findV9PornItemByViewKey(v9PornItem.getViewKey());
         //登录之后，第一次需要刷新获取uid,否则无法使用收藏功能
         if (tmp == null || tmp.getVideoResultId() == 0 || presenter.isLoadForUid()) {
@@ -224,7 +186,13 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             setToolBarLayoutInfo(v9PornItem);
             playVideo(v9PornItem.getTitle(), presenter.getVideoCacheProxyUrl(videoResult.getVideoUrl()), videoResult.getVideoName(), videoResult.getThumbImgUrl());
             //加载评论
-            presenter.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
+            if (commentFragment != null) {
+                commentFragment.setV9PornItem(v9PornItem);
+                commentFragment.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
+            }
+            if (authorFragment != null) {
+                authorFragment.setV9PornItem(v9PornItem);
+            }
         }
     }
 
@@ -242,39 +210,14 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         tvPlayVideoAuthor.setText(videoResult.getOwnerName());
         tvPlayVideoAddDate.setText(videoResult.getAddDate());
         tvPlayVideoInfo.setText(videoResult.getUserOtherInfo());
-        tvPlayVideoAuthor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!presenter.isUserLogin()) {
-                    goToLogin(0);
-                    showMessage("请先登录", TastyToast.INFO);
-                    return;
-                }
-                if (v9PornItem.getVideoResultId() == 0) {
-                    showMessage("视频还未解析成功！", TastyToast.INFO);
-                    return;
-                }
-                Intent intent = new Intent(BasePlayVideo.this, AuthorActivity.class);
-                intent.putExtra(Keys.KEY_INTENT_UID, v9PornItem.getVideoResult().getOwnerId());
-                startActivityForResultWithAnimation(intent, 1);
-            }
-        });
     }
 
     private void initLoadHelper() {
-        helper = new LoadViewHelper(commentSwipeRefreshLayout);
+        helper = new LoadViewHelper(viewPagerPlay);
         helper.setListener(new OnLoadViewListener() {
             @Override
             public void onRetryClick() {
-                if (isVideoError) {
-                    presenter.loadVideoUrl(v9PornItem);
-                } else {
-                    //加载评论
-                    if (v9PornItem.getVideoResultId() == 0) {
-                        return;
-                    }
-                    presenter.loadVideoComment(v9PornItem.getVideoResult().getVideoId(), v9PornItem.getViewKey(), true);
-                }
+                presenter.loadVideoUrl(v9PornItem);
             }
         });
     }
@@ -282,47 +225,10 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     private void initDialog() {
         mAlertDialog = DialogUtils.initLoadingDialog(this, "视频地址解析中...");
         favoriteDialog = DialogUtils.initLoadingDialog(this, "收藏中,请稍后...");
-        commentVideoDialog = DialogUtils.initLoadingDialog(this, "提交评论中,请稍后...");
-    }
-
-    private void initVideoComments() {
-
-        List<VideoComment> videoCommentList = new ArrayList<>();
-        videoCommentAdapter = new VideoCommentAdapter(this, R.layout.item_video_comment, videoCommentList);
-
-        recyclerViewVideoComment.setLayoutManager(new LinearLayoutManager(this));
-        recyclerViewVideoComment.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerViewVideoComment.setAdapter(videoCommentAdapter);
-        videoCommentAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
-            @Override
-            public void onLoadMoreRequested() {
-                //加载评论
-                if (v9PornItem.getVideoResultId() == 0) {
-                    videoCommentAdapter.loadMoreFail();
-                    return;
-                }
-                presenter.loadVideoComment(v9PornItem.getVideoResult().getVideoId(), v9PornItem.getViewKey(), false);
-            }
-        }, recyclerViewVideoComment);
-        videoCommentAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (floatingToolbar.isShowing()) {
-                    floatingToolbar.hide();
-                }
-                isComment = false;
-                videoCommentAdapter.setClickPosition(position);
-                videoCommentAdapter.notifyDataSetChanged();
-                videoComment = (VideoComment) adapter.getData().get(position);
-                etVideoComment.setHint("回复：" + videoComment.getuName());
-            }
-        });
-
     }
 
     private void initBottomMenu() {
         floatingToolbar.attachFab(fab);
-        floatingToolbar.attachRecyclerView(recyclerViewVideoComment);
         floatingToolbar.setClickListener(new FloatingToolbar.ItemClickListener() {
             @Override
             public void onItemClick(MenuItem item) {
@@ -350,7 +256,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     @NonNull
     @Override
     public PlayVideoPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return playVideoPresenter;
     }
 
@@ -371,7 +276,13 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         //开始播放
         playVideo(v9PornItem.getTitle(), presenter.getVideoCacheProxyUrl(videoResult.getVideoUrl()), "", videoResult.getThumbImgUrl());
         helper.showContent();
-        presenter.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
+        if (commentFragment != null) {
+            commentFragment.setV9PornItem(v9PornItem);
+            commentFragment.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
+        }
+        if (authorFragment != null) {
+            authorFragment.setV9PornItem(v9PornItem);
+        }
         boolean neverAskForWatchDownloadTip = presenter.isNeverAskForWatchDownloadTip();
         if (!neverAskForWatchDownloadTip) {
             showWatchDownloadVideoTipDialog();
@@ -384,8 +295,8 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         builder.setTitle("温馨提示");
         builder.setMessage("1. 通常你无法在线观看视频就意味着你也无法下载视频，所以如果你不能在线观看视频就不要想着下载了再看了，那样绝大多数时候都是不能下载的；\n" +
                 "2. 如果在线观看速度慢可以选择先下载后再观看，因为是多线程下载，有时候能够比在线观看要快；\n" +
-                "3. 如果想要更好的在线观看和下载体验，目前最好的办法就是挂代理（非设置中的HTTP代理）；\n" +
-                "4. 点击作者名字可查看该作者其他视频（需要登录帐号）。");
+                "3. 如果想要更好的在线观看和下载体验，目前最好的办法就是使用梯子（非设置中的HTTP代理）；\n" +
+                "4. 查看该作者其他视频（需要登录帐号）。");
         builder.addAction("我知道了", new QMUIDialogAction.ActionListener() {
             @Override
             public void onClick(QMUIDialog dialog, int index) {
@@ -405,7 +316,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     @Override
     public void errorParseVideoUrl(String errorMessage) {
         dismissDialog();
-        isVideoError = true;
         helper.showError();
         LoadHelperUtils.setErrorText(helper.getLoadError(), R.id.tv_error_text, "解析视频地址失败了，点击重试");
         showMessage(errorMessage, TastyToast.ERROR);
@@ -415,81 +325,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     public void favoriteSuccess() {
         presenter.setFavoriteNeedRefresh(true);
         showMessage("收藏成功", TastyToast.SUCCESS);
-    }
-
-    @Override
-    public void setVideoCommentData(List<VideoComment> videoCommentList, boolean pullToRefresh) {
-        if (pullToRefresh) {
-            recyclerViewVideoComment.smoothScrollToPosition(0);
-        }
-        videoCommentAdapter.setNewData(videoCommentList);
-        commentSwipeRefreshLayout.setEnabled(true);
-    }
-
-    @Override
-    public void setMoreVideoCommentData(List<VideoComment> videoCommentList) {
-        videoCommentAdapter.loadMoreComplete();
-        videoCommentAdapter.addData(videoCommentList);
-    }
-
-    @Override
-    public void noMoreVideoCommentData(String message) {
-        videoCommentAdapter.loadMoreEnd(true);
-        //showMessage(message, TastyToast.INFO);
-    }
-
-    @Override
-    public void loadMoreVideoCommentError(String message) {
-        videoCommentAdapter.loadMoreFail();
-    }
-
-    @Override
-    public void loadVideoCommentError(String message) {
-        isVideoError = false;
-        helper.showError();
-        LoadHelperUtils.setErrorText(helper.getLoadError(), R.id.tv_error_text, "加载评论失败了，点击重试");
-        //showMessage(message, TastyToast.Error);
-    }
-
-    @Override
-    public void commentVideoSuccess(String message) {
-        cleanVideoCommentInput();
-        reFreshData();
-        showMessage(message, TastyToast.SUCCESS);
-    }
-
-    @Override
-    public void commentVideoError(String message) {
-        showMessage(message, TastyToast.ERROR);
-    }
-
-    @Override
-    public void replyVideoCommentSuccess(String message) {
-        cleanVideoCommentInput();
-        isComment = true;
-        etVideoComment.setHint(R.string.comment_video_hint_tip);
-        videoCommentAdapter.setClickPosition(-1);
-        reFreshData();
-        showMessage(message, TastyToast.SUCCESS);
-    }
-
-    private void reFreshData() {
-        if (v9PornItem.getVideoResultId() == 0) {
-            return;
-        }
-        //刷新
-        commentSwipeRefreshLayout.setRefreshing(true);
-        String videoId = v9PornItem.getVideoResult().getVideoId();
-        presenter.loadVideoComment(videoId, v9PornItem.getViewKey(), true);
-    }
-
-    @Override
-    public void replyVideoCommentError(String message) {
-        showMessage(message, TastyToast.ERROR);
-    }
-
-    private void cleanVideoCommentInput() {
-        etVideoComment.setText("");
     }
 
     @Override
@@ -506,15 +341,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     @Override
     public void showContent() {
-        if (videoCommentAdapter.getData().size() == 0) {
-            isVideoError = false;
-            helper.showEmpty();
-            LoadHelperUtils.setEmptyText(helper.getLoadEmpty(), R.id.tv_empty_info, "暂无评论");
-        } else {
-            //flLoadHolder.setVisibility(View.GONE);
-            helper.showContent();
-        }
-        commentSwipeRefreshLayout.setRefreshing(false);
+        helper.showContent();
         dismissDialog();
     }
 
@@ -530,9 +357,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         }
         if (favoriteDialog != null && favoriteDialog.isShowing() && !isFinishing()) {
             favoriteDialog.dismiss();
-        }
-        if (commentVideoDialog != null && commentVideoDialog.isShowing() && !isFinishing()) {
-            commentVideoDialog.dismiss();
         }
     }
 
@@ -625,12 +449,10 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == KeysActivityRequestResultCode.AUTHOR_ACTIVITY_RESULT_CODE) {
-            v9PornItem = (V9PornItem) data.getSerializableExtra(Keys.KEY_INTENT_V9PORN_ITEM);
-            recyclerViewVideoComment.smoothScrollToPosition(0);
-            videoCommentAdapter.getData().clear();
-            videoCommentAdapter.notifyDataSetChanged();
-            initData();
+        if (resultCode == KeysActivityRequestResultCode.RESULT_FOR_LOOK_AUTHOR_VIDEO) {
+            if (authorFragment != null) {
+                authorFragment.loadAuthorVideos();
+            }
         } else if (resultCode == KeysActivityRequestResultCode.RESULT_CODE_FOR_REFRESH_GET_UID) {
             Logger.t(TAG).d("登录成功，需要刷新以获取uid");
             presenter.loadVideoUrl(v9PornItem);
@@ -648,5 +470,9 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         } else if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
+    }
+
+    public void setV9PornItems(V9PornItem v9PornItems) {
+        this.v9PornItem = v9PornItems;
     }
 }

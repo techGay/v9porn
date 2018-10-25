@@ -1,9 +1,9 @@
 {
-"apkDownloadUrl": "https://raw.githubusercontent.com/techGay/v9porn/master/apk/app-v1.0.2.apk",
-"updateMessage": "1. 修复九妹图社图片无法加载问题\n
-                  2. 现在在服务器发生跳转时仍然能够正常登录了\n
-                  3. 其他细小bug
+"apkDownloadUrl": "https://raw.githubusercontent.com/techGay/v9porn/master/apk/app-v1.0.8.apk",
+"updateMessage": "
+                  1. 修复适配JiaoZiVideoPlayer播放引擎\n
+                  2. 修复9*PORN除主页外其他分类打开崩溃的Bug
 ",
-"versionCode": 3,
-"versionName": "1.0.2"
+"versionCode": 9,
+"versionName": "1.0.8"
 }

@@ -1,6 +1,6 @@
 package com.u9porn.ui.pav;
 
-import com.u9porn.data.model.PavModel;
+import com.u9porn.data.model.pxgav.PavModel;
 import com.u9porn.ui.BaseView;
 
 import java.util.List;

@@ -21,14 +21,14 @@ import dagger.Component;
  * @author flymegoc
  * @date 2018/2/4
  */
-@Singleton
-@Component(modules = {ApplicationModule.class, ApiServiceModule.class})
+//@Singleton
+//@Component(modules = {ApplicationModule.class, ApiServiceModule.class})
 public interface ApplicationComponent {
     void inject(MyApplication myApplication);
 
     void inject(DownloadManager downloadManager);
 
-    @ApplicationContext
+    //@ApplicationContext
     Context getContext();
 
     DataManager getDataManager();

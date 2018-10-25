@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -64,16 +65,15 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
         ButterKnife.bind(this);
+        goFullScreen();
         alertDialog = DialogUtils.initLoadingDialog(this, "解析图片列表中，请稍后...");
         init();
         initListener();
-        goFullScreen();
     }
 
     @NonNull
     @Override
     public PictureViewerPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return pictureViewerPresenter;
     }
 
@@ -188,24 +188,19 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
     }
 
     private void notifySystemGallery(File file) {
-        Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.u9porn.fileprovider", file);
-        } else {
-            uri = Uri.fromFile(file);
-        }
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        intent.setData(uri);
-        sendBroadcast(intent);
+
+        MediaScannerConnection.scanFile(this,new String[]{file.getAbsolutePath()},new String[]{"image/jpeg"},null);
     }
 
     protected void goFullScreen() {
         isFullScreen = true;
+        tvNum.setVisibility(View.INVISIBLE);
         setUiFlags(true);
     }
 
     protected void exitFullScreen() {
         isFullScreen = false;
+        tvNum.setVisibility(View.VISIBLE);
         setUiFlags(false);
     }
 

@@ -20,8 +20,8 @@ import java.util.List;
 
 public class V91PornAdapter extends BaseQuickAdapter<V9PornItem, BaseViewHolder> {
 
-    public V91PornAdapter(int layoutResId, @Nullable List<V9PornItem> data) {
-        super(layoutResId, data);
+    public V91PornAdapter(int layoutResId) {
+        super(layoutResId);
     }
 
     @Override

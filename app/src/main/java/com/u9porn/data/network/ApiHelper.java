@@ -2,11 +2,12 @@ package com.u9porn.data.network;
 
 import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.model.F9PronItem;
+import com.u9porn.data.model.HuaBan;
 import com.u9porn.data.model.MeiZiTu;
 import com.u9porn.data.model.Mm99;
 import com.u9porn.data.model.Notice;
-import com.u9porn.data.model.PavModel;
-import com.u9porn.data.model.PavVideoParserJsonResult;
+import com.u9porn.data.model.pxgav.PavModel;
+import com.u9porn.data.model.pxgav.PavVideoParserJsonResult;
 import com.u9porn.data.model.PinnedHeaderEntity;
 import com.u9porn.data.model.F9PornContent;
 import com.u9porn.data.model.ProxyModel;
@@ -15,10 +16,14 @@ import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.data.model.User;
 import com.u9porn.data.model.VideoComment;
 import com.u9porn.data.db.entity.VideoResult;
+import com.u9porn.data.model.axgle.AxgleResponse;
+import com.u9porn.data.model.axgle.AxgleVideo;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 
 /**
  * @author flymegoc
@@ -89,4 +94,16 @@ public interface ApiHelper {
     Observable<Boolean> testPorn9ForumAddress();
 
     Observable<Boolean> testPavAddress(String url);
+
+    Observable<Boolean> testAxgle();
+
+    Observable<List<HuaBan.Picture>> findPictures(int categoryId, int page);
+
+    Observable<AxgleResponse> axgleVideos(int page, String o, String t, String type, String c, int limit);
+
+    Observable<List<AxgleVideo>> searchAxgleVideo();
+
+    Observable<List<AxgleVideo>> searchAxgleJavVideo();
+
+    Call<ResponseBody> getPlayVideoUrl(String url);
 }

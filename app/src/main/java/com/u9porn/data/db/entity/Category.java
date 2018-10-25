@@ -25,11 +25,18 @@ public class Category implements Serializable {
     public static final String[] CATEGORY_DEFAULT_PIG_AV_NAME = {"主页", "热门", "长片", "每日", "最新", "日韩", "精选"};
     public static final String[] CATEGORY_DEFAULT_99_MM_VALUE = {"index", "meitui", "xinggan", "qingchun", "hot"};
     public static final String[] CATEGORY_DEFAULT_99_MM_NAME = {"主页", "靓丽腿模", "性感美女", "清纯美女", "美女推荐"};
+    public static final String[] CATEGORY_DEFAULT_HUA_BAN_NAME = {"造型美妆", "美食", "旅行", "手工布艺", "健身舞蹈", "儿童", "宠物", "美图", "明星", "美女", "礼物", "极客", "动漫", "建筑设计", "人文艺术", "数据图", "游戏", "汽车摩托", "电影图书", "生活百科", "教育", "运动", "搞笑"};
+
+    public static final String[] CATEGORY_DEFAULT_AXGLE_VALUE={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
+    public static final String[] CATEGORY_DEFAULT_AXGLE_NAME={"AV女優","日本AV","無修正","少女","素人","肛X","巨乳","Cosplay","女子校生","人妻","熟女","SM","中國","香港","日本","韓国","台湾","亞洲","金髪洋物","3D","VR","偶像","映画・電影","Anime"};
+
     public static final int TYPE_91PORN = 1;
     public static final int TYPE_91PORN_FORUM = 2;
     public static final int TYPE_MEI_ZI_TU = 3;
     public static final int TYPE_PIG_AV = 4;
     public static final int TYPE_99_MM = 5;
+    public static final int TYPE_HUA_BAN = 6;
+    public static final int TYPE_AXGLE=7;
     private static final long serialVersionUID = 1L;
 
     @Id(autoincrement = true)

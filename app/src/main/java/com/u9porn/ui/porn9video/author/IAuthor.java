@@ -7,4 +7,5 @@ package com.u9porn.ui.porn9video.author;
 
 public interface IAuthor {
     void authorVideos(String uid,boolean pullToRefresh);
+    boolean isUserLogin();
 }

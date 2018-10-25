@@ -82,7 +82,6 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
     @NonNull
     @Override
     public ForumPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return forumPresenter;
     }
 

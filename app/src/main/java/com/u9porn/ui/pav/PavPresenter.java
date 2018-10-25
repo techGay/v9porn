@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
-import com.u9porn.data.model.PavModel;
+import com.u9porn.data.model.pxgav.PavModel;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.ui.MvpBasePresenter;

@@ -35,13 +35,13 @@
     <string name="comment_video_hint_tip">切勿回复与视频无关内容，否则禁言</string>
     <string name="about_item_homepage">去GitHub提建议或者Bug反馈</string>
     <string name="about_item_github">GitHub 项目</string>
-    <string name="about_copyright">© %1$s TechGay 91PORN All rights reserved.</string>
+    <string name="about_copyright">© %1$s TechGay V9PORN All rights reserved.</string>
     <string name="about_check_update">检查更新</string>
     <string name="playback_engine">播放引擎</string>
-    <string name="address_v9porn">设置V9视频地址</string>
-    <string name="address_forum_9porn">设置F9论坛地址</string>
-    <string name="address_t6y">设置cl地址</string>
-    <string name="address_pa">设置zgl视频地址</string>
+    <string name="address_v9porn">设置9*PORN视频地址</string>
+    <string name="address_forum_9porn">设置9*PORN论坛地址</string>
+    <string name="address_t6y">设置CaoLiu地址</string>
+    <string name="address_pa">设置ZhuGuLi视频地址</string>
     <string name="about_item_clean_cache">清除缓存</string>
     <string name="proxy_setting">HTTP代理</string>
     <string name="night_mode">夜间模式</string>
@@ -76,4 +76,5 @@
     <string name="sure">确定</string>
     <string name="author">作者：</string>
     <string name="send_icon">sendIcon</string>
+    <string name="address_axgle">设置A*gle的API地址</string>
 </resources>

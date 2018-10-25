@@ -184,6 +184,50 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
     }
 
     @Override
+    public void testAxgle(String baseUrl, final QMUICommonListItemView qmuiCommonListItemView, final String key) {
+        RetrofitUrlManager.getInstance().putDomain(Api.AXGLE_DOMAIN_NAME, baseUrl);
+        dataManager.testAxgle()
+                .compose(RxSchedulersHelper.<Boolean>ioMainThread())
+                .compose(provider.<Boolean>bindToLifecycle())
+                .subscribe(new CallBackWrapper<Boolean>() {
+
+                    @Override
+                    public void onBegin(Disposable d) {
+                        ifViewAttached(new ViewAction<SettingView>() {
+                            @Override
+                            public void run(@NonNull SettingView view) {
+                                view.showTestingAddressDialog(true);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onSuccess(final Boolean s) {
+                        ifViewAttached(new ViewAction<SettingView>() {
+                            @Override
+                            public void run(@NonNull SettingView view) {
+                                if (s) {
+                                    view.testNewAddressSuccess("测试成功", qmuiCommonListItemView, key);
+                                } else {
+                                    view.testNewAddressSuccess("测试失败，可以访问，但无法获取正确的数据", qmuiCommonListItemView, key);
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(final String msg, int code) {
+                        ifViewAttached(new ViewAction<SettingView>() {
+                            @Override
+                            public void run(@NonNull SettingView view) {
+                                view.testNewAddressFailure(msg, qmuiCommonListItemView, key);
+                            }
+                        });
+                    }
+                });
+    }
+
+    @Override
     public boolean isHaveUnFinishDownloadVideo() {
         return dataManager.loadDownloadingData().size() != 0;
     }
@@ -361,5 +405,25 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
     @Override
     public String getPavAddress() {
         return dataManager.getPavAddress();
+    }
+
+    @Override
+    public boolean isShowUrlRedirectTipDialog() {
+        return dataManager.isShowUrlRedirectTipDialog();
+    }
+
+    @Override
+    public void setShowUrlRedirectTipDialog(boolean showUrlRedirectTipDialog) {
+        dataManager.setShowUrlRedirectTipDialog(showUrlRedirectTipDialog);
+    }
+
+    @Override
+    public void setAxgleAddress(String address) {
+        dataManager.setAxgleAddress(address);
+    }
+
+    @Override
+    public String getAxgleAddress() {
+        return dataManager.getAxgleAddress();
     }
 }

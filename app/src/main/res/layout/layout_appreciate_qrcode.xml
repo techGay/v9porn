@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/iv_appreciate_qrcode"
+        android:layout_width="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mm_reward_qrcode_1532268036853"
+        android:layout_height="220dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_40"
+        android:text="如果你觉得项目还不错，请我喝杯咖啡，算是对我的认可和鼓励(扫一扫或者截图保存微信打开即可，请认准是GitHub上的apk，否则可能被调包了)。"
+        android:textSize="@dimen/sp_16" />
+</LinearLayout>

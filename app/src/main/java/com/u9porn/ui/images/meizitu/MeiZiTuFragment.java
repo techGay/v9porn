@@ -41,7 +41,6 @@ import butterknife.Unbinder;
  */
 public class MeiZiTuFragment extends MvpFragment<MeiZiTuView, MeiZiTuPresenter> implements MeiZiTuView, SwipeRefreshLayout.OnRefreshListener {
 
-
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     Unbinder unbinder;
@@ -80,7 +79,6 @@ public class MeiZiTuFragment extends MvpFragment<MeiZiTuView, MeiZiTuPresenter> 
     @NonNull
     @Override
     public MeiZiTuPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return meiZiTuPresenter;
     }
 

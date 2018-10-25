@@ -143,7 +143,6 @@ public class ProxySettingActivity extends MvpActivity<ProxyView, ProxyPresenter>
     @NonNull
     @Override
     public ProxyPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return proxyPresenter;
     }
 

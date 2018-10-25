@@ -3,30 +3,16 @@ package com.u9porn.di.module;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.orhanobut.logger.Logger;
 import com.u9porn.cookie.SetCookieCache;
 import com.u9porn.cookie.SharedPrefsCookiePersistor;
 import com.u9porn.data.network.Api;
-import com.u9porn.data.network.apiservice.Forum9PronServiceApi;
-import com.u9porn.data.network.apiservice.GitHubServiceApi;
-import com.u9porn.data.network.apiservice.MeiZiTuServiceApi;
-import com.u9porn.data.network.apiservice.Mm99ServiceApi;
-import com.u9porn.data.network.apiservice.PavServiceApi;
-import com.u9porn.data.network.apiservice.V9PornServiceApi;
-import com.u9porn.data.network.apiservice.ProxyServiceApi;
-import com.u9porn.di.ApplicationContext;
-import com.u9porn.utils.AddressHelper;
+import com.u9porn.data.network.apiservice.*;
 import com.u9porn.data.network.okhttp.CommonHeaderInterceptor;
 import com.u9porn.data.network.okhttp.MyProxySelector;
-
-import java.net.Proxy;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Singleton;
-
+import com.u9porn.di.ApplicationContext;
+import com.u9porn.utils.AddressHelper;
 import dagger.Module;
 import dagger.Provides;
 import me.jessyan.retrofiturlmanager.RetrofitUrlManager;
@@ -35,6 +21,11 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import javax.inject.Singleton;
+import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author flymegoc
@@ -65,6 +56,12 @@ public class ApiServiceModule {
 
     @Singleton
     @Provides
+    RulerCookie providesRuler(SharedPrefsCookiePersistor sharedPrefsCookiePersistor, SetCookieCache setCookieCache){
+        return new RulerCookie(setCookieCache,sharedPrefsCookiePersistor);
+    }
+
+    @Singleton
+    @Provides
     HttpLoggingInterceptor providesHttpLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
@@ -84,17 +81,18 @@ public class ApiServiceModule {
 
     @Singleton
     @Provides
-    OkHttpClient providesOkHttpClient(CommonHeaderInterceptor commonHeaderInterceptor, HttpLoggingInterceptor httpLoggingInterceptor, PersistentCookieJar persistentCookieJar, MyProxySelector myProxySelector, AddressHelper addressHelper) {
+    OkHttpClient providesOkHttpClient(CommonHeaderInterceptor commonHeaderInterceptor, HttpLoggingInterceptor httpLoggingInterceptor, RulerCookie rulerCookie, MyProxySelector myProxySelector, AddressHelper addressHelper) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(commonHeaderInterceptor);
         builder.addInterceptor(httpLoggingInterceptor);
-        builder.cookieJar(persistentCookieJar);
+        builder.cookieJar(rulerCookie);
         builder.proxySelector(myProxySelector);
         //动态baseUrl
         RetrofitUrlManager.getInstance().putDomain(Api.GITHUB_DOMAIN_NAME, Api.APP_GITHUB_DOMAIN);
         RetrofitUrlManager.getInstance().putDomain(Api.MEI_ZI_TU_DOMAIN_NAME, Api.APP_MEIZITU_DOMAIN);
         RetrofitUrlManager.getInstance().putDomain(Api.MM_99_DOMAIN_NAME, Api.APP_99_MM_DOMAIN);
         RetrofitUrlManager.getInstance().putDomain(Api.XICI_DAILI_DOMAIN_NAME, Api.APP_PROXY_XICI_DAILI_DOMAIN);
+        RetrofitUrlManager.getInstance().putDomain(Api.HUA_BAN_DOMAIN_NAME, Api.APP_HUA_BAN_DOMAIN);
         if (!TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
             RetrofitUrlManager.getInstance().putDomain(Api.PORN9_VIDEO_DOMAIN_NAME, addressHelper.getVideo9PornAddress());
         }
@@ -103,6 +101,9 @@ public class ApiServiceModule {
         }
         if (!TextUtils.isEmpty(addressHelper.getPavAddress())) {
             RetrofitUrlManager.getInstance().putDomain(Api.PA_DOMAIN_NAME, addressHelper.getPavAddress());
+        }
+        if (!TextUtils.isEmpty(addressHelper.getAxgleAddress())) {
+            RetrofitUrlManager.getInstance().putDomain(Api.AXGLE_DOMAIN_NAME, addressHelper.getAxgleAddress());
         }
         return RetrofitUrlManager.getInstance().with(builder).build();
     }
@@ -158,5 +159,17 @@ public class ApiServiceModule {
     @Provides
     ProxyServiceApi providesProxyServiceApi(Retrofit retrofit) {
         return retrofit.create(ProxyServiceApi.class);
+    }
+
+    @Singleton
+    @Provides
+    HuaBanServiceApi providesHuaBanServiceApi(Retrofit retrofit) {
+        return retrofit.create(HuaBanServiceApi.class);
+    }
+
+    @Singleton
+    @Provides
+    AxgleServiceApi providesAxgleServiceApi(Retrofit retrofit) {
+        return retrofit.create(AxgleServiceApi.class);
     }
 }

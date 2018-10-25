@@ -7,7 +7,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.UpdateVersion;
-import com.u9porn.di.PerActivity;
 import com.u9porn.rxjava.CallBackWrapper;
 
 import javax.inject.Inject;
@@ -20,7 +19,6 @@ import io.reactivex.schedulers.Schedulers;
  * @author flymegoc
  * @date 2017/12/22
  */
-@PerActivity
 public class UpdatePresenter extends MvpBasePresenter<UpdateView> implements IUpdate {
 
     private LifecycleProvider<Lifecycle.Event> provider;

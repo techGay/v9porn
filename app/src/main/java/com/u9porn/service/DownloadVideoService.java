@@ -24,10 +24,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.android.DaggerService;
+
 /**
  * @author flymegoc
  */
-public class DownloadVideoService extends Service implements DownloadManager.DownloadStatusUpdater {
+public class DownloadVideoService extends DaggerService implements DownloadManager.DownloadStatusUpdater {
 
     @Inject
     protected DataManager dataManager;
@@ -45,7 +47,6 @@ public class DownloadVideoService extends Service implements DownloadManager.Dow
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerServiceComponent.builder().applicationComponent(((MyApplication) getApplication()).getApplicationComponent()).build().inject(this);
         DownloadManager.getImpl().addUpdater(this);
     }
 
@@ -59,6 +60,8 @@ public class DownloadVideoService extends Service implements DownloadManager.Dow
         int id = Constants.VIDEO_DOWNLOAD_NOTIFICATION_ID;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelHelper.CHANNEL_ID_FOR_DOWNLOAD);
         builder.setContentTitle("正在下载");
+        //只响铃震动一次
+        builder.setOnlyAlertOnce(true);
         builder.setSmallIcon(R.mipmap.ic_launcher_round);
         builder.setProgress(100, progress, false);
         builder.setContentText(fileSize + "--" + speed + "KB/s");

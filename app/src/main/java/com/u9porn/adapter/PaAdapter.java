@@ -7,7 +7,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.u9porn.R;
-import com.u9porn.data.model.PavModel;
+import com.u9porn.data.model.pxgav.PavModel;
 import com.u9porn.utils.GlideApp;
 
 import java.util.HashMap;

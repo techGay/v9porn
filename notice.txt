@@ -1,9 +1,9 @@
 {
   "noticeMessage": "
-  项目24小时后删除，感谢各位老铁的支持。
+    当前1.0.7版本因为代码改动，导致没有适配到JiaoZiPlayer播放引擎导致崩溃，所以请使用google exoplayer播放引擎即可，后续基本只会更新升级exoplayer,jiaoziplayer只会修复。
   ",
-  "noticeTime": "2018年2月5日",
+  "noticeTime": "2018年10月2日",
    "noticeTitle": "公告",
    "noticeer": "Adimn",
-   "versionCode": 0
+   "versionCode": 3
  }

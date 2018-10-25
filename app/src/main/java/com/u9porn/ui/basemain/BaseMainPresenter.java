@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.Category;
-import com.u9porn.di.PerActivity;
 
 import java.util.List;
 
@@ -15,7 +14,6 @@ import javax.inject.Inject;
  * @author flymegoc
  * @date 2018/1/25
  */
-@PerActivity
 public class BaseMainPresenter extends MvpBasePresenter<BaseMainView> implements IBaseMain {
     protected DataManager dataManager;
 

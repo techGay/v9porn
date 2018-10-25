@@ -19,6 +19,7 @@ public class JiaoZiVideoPlayerActivity extends BasePlayVideo {
 
     @Override
     public void initPlayerView() {
+        videoPlayerContainer.removeAllViews();
         View view = LayoutInflater.from(this).inflate(R.layout.playback_engine_jiao_zi, videoPlayerContainer, true);
         jzVideoPlayerStandard = view.findViewById(R.id.videoplayer);
     }

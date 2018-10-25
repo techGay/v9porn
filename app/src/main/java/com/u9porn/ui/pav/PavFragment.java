@@ -18,7 +18,7 @@ import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.PaAdapter;
-import com.u9porn.data.model.PavModel;
+import com.u9porn.data.model.pxgav.PavModel;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.pav.playpav.PlayPavActivity;
 import com.u9porn.utils.AppUtils;
@@ -71,7 +71,6 @@ public class PavFragment extends MvpFragment<PavView, PavPresenter> implements P
     @NonNull
     @Override
     public PavPresenter createPresenter() {
-        getActivityComponent().inject(this);
 
         return pigAvPresenter;
     }

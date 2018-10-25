@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.porn9video.comment.CommentFragment">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/comment_swipe_refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?attr/actionBarSize"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView_video_comment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/et_comment_video"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/comment_video_hint_tip"
+            android:theme="@style/MyEditText" />
+
+        <ImageView
+            android:id="@+id/iv_send_video_comment"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/send_icon"
+            android:padding="5dp"
+            android:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_send_black_24dp" />
+    </LinearLayout>
+</RelativeLayout>

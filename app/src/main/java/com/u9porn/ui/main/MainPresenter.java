@@ -7,11 +7,8 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.Notice;
 import com.u9porn.data.model.UpdateVersion;
-import com.u9porn.data.model.User;
-import com.u9porn.di.PerActivity;
 import com.u9porn.ui.notice.NoticePresenter;
 import com.u9porn.ui.update.UpdatePresenter;
-import com.u9porn.utils.UserHelper;
 
 import javax.inject.Inject;
 
@@ -19,7 +16,6 @@ import javax.inject.Inject;
  * @author flymegoc
  * @date 2017/12/23
  */
-@PerActivity
 public class MainPresenter extends MvpBasePresenter<MainView> implements IMain {
 
     private UpdatePresenter updatePresenter;
@@ -154,7 +150,22 @@ public class MainPresenter extends MvpBasePresenter<MainView> implements IMain {
     }
 
     @Override
+    public boolean haveNotSetAxgleAddress() {
+        return false;
+    }
+
+    @Override
     public boolean isUserLogin() {
         return dataManager.isUserLogin();
+    }
+
+    @Override
+    public void setPorn9VideoAddress(String porn9VideoAddress) {
+        dataManager.setPorn9VideoAddress(porn9VideoAddress);
+    }
+
+    @Override
+    public void setPorn9ForumAddress(String porn9ForumAddress) {
+        dataManager.setPorn9ForumAddress(porn9ForumAddress);
     }
 }

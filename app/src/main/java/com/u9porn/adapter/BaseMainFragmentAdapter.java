@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
 import com.u9porn.data.db.entity.Category;
+import com.u9porn.ui.axgle.AxgleFragment;
+import com.u9porn.ui.images.huaban.HuaBanFragment;
 import com.u9porn.ui.images.meizitu.MeiZiTuFragment;
 import com.u9porn.ui.images.mm99.Mm99Fragment;
 import com.u9porn.ui.pav.PavFragment;
@@ -111,6 +113,14 @@ public class BaseMainFragmentAdapter extends FragmentPagerAdapter {
                 Mm99Fragment mm99Fragment = Mm99Fragment.getInstance();
                 mm99Fragment.setCategory(category);
                 return mm99Fragment;
+            case Category.TYPE_HUA_BAN:
+                HuaBanFragment huaBanFragment = HuaBanFragment.getInstance();
+                huaBanFragment.setCategory(category);
+                return huaBanFragment;
+            case Category.TYPE_AXGLE:
+                AxgleFragment axgleFragment=AxgleFragment.getInstance();
+                axgleFragment.setCategory(category);
+                return axgleFragment;
             default:
         }
         return new Fragment();

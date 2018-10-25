@@ -4,16 +4,13 @@ import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
-import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.db.entity.V9PornItem;
+import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.model.User;
-import com.u9porn.di.PerActivity;
 import com.u9porn.exception.ApiException;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RetryWhenProcess;
@@ -39,7 +36,6 @@ import io.reactivex.schedulers.Schedulers;
  * @date 2017/11/25
  * @describe
  */
-@PerActivity
 public class FavoritePresenter extends MvpBasePresenter<FavoriteView> implements IFavorite {
     private static final String TAG = FavoriteListener.class.getSimpleName();
 
@@ -140,7 +136,7 @@ public class FavoritePresenter extends MvpBasePresenter<FavoriteView> implements
                 @Override
                 public void run(@NonNull FavoriteView view) {
                     if (user != null) {
-                        Bugsnag.notify(new Throwable(TAG + " user info: " + user.toString()), Severity.WARNING);
+                       // Bugsnag.notify(new Throwable(TAG + " user info: " + user.toString()), Severity.WARNING);
                     }
                     view.showError("用户信息不完整，请重新登录后重试！");
                 }

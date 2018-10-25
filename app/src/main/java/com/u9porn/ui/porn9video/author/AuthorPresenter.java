@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.BaseResult;
@@ -27,6 +28,7 @@ import io.reactivex.functions.Function;
 
 public class AuthorPresenter extends MvpBasePresenter<AuthorView> implements IAuthor {
 
+    private static final String TAG = AuthorPresenter.class.getSimpleName();
     private LifecycleProvider<Lifecycle.Event> provider;
     private int page = 1;
     private Integer totalPage;
@@ -37,6 +39,7 @@ public class AuthorPresenter extends MvpBasePresenter<AuthorView> implements IAu
     public AuthorPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         this.provider = provider;
         this.dataManager = dataManager;
+        Logger.t(TAG).d("AuthorPresenter初始化了.....");
     }
 
     @Override
@@ -113,5 +116,10 @@ public class AuthorPresenter extends MvpBasePresenter<AuthorView> implements IAu
                         });
                     }
                 });
+    }
+
+    @Override
+    public boolean isUserLogin() {
+        return dataManager.isUserLogin();
     }
 }

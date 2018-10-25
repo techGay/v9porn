@@ -16,9 +16,8 @@ public class AddressHelper {
 
     /**
      * 无需手动初始化,已在di中全局单例
-     *
      */
-    public AddressHelper( PreferencesHelper preferencesHelper) {
+    public AddressHelper(PreferencesHelper preferencesHelper) {
         mRandom = new Random();
         this.preferencesHelper = preferencesHelper;
     }
@@ -43,5 +42,9 @@ public class AddressHelper {
 
     public String getPavAddress() {
         return preferencesHelper.getPavAddress();
+    }
+
+    public String getAxgleAddress() {
+        return preferencesHelper.getAxgleAddress();
     }
 }

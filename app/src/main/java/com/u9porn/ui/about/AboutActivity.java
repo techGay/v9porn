@@ -3,12 +3,15 @@ package com.u9porn.ui.about;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qmuiteam.qmui.util.QMUIPackageHelper;
@@ -25,6 +28,7 @@ import com.u9porn.ui.MvpActivity;
 import com.u9porn.utils.ApkVersionUtils;
 import com.u9porn.utils.AppCacheUtils;
 import com.u9porn.utils.DialogUtils;
+import com.u9porn.utils.GlideApp;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -115,6 +119,12 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
                         showChoiceCacheCleanDialog();
                     }
                 })
+                .addItemView(mAboutGroupListView.createItemView("赞赏我，请我喝杯咖啡"), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showAppreciateDialog();
+                    }
+                })
                 .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_check_update)), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -129,6 +139,14 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
                 })
                 .addTo(mAboutGroupListView);
 
+    }
+
+    private void showAppreciateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyDialogTheme);
+        builder.setTitle("赞赏作者");
+        builder.setView(R.layout.layout_appreciate_qrcode);
+        builder.setNegativeButton("算了，囊中羞涩", null);
+        builder.show();
     }
 
     private void showChoiceCacheCleanDialog() {
@@ -198,7 +216,6 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
     @NonNull
     @Override
     public AboutPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return aboutPresenter;
     }
 

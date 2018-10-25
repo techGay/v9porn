@@ -52,6 +52,6 @@ public interface PavServiceApi {
      */
     @Headers({"Domain-Name: " + Api.PA_DOMAIN_NAME})
     @FormUrlEncoded
-    @POST("wp-admin/admin-ajax.php?td_theme_name=Newsmag&v=4.2")
+    @POST("wp-admin/admin-ajax.php?td_theme_name=Newsmag&v=4.5")
     Observable<String> moreVideoList(@Field("action") String action, @Field("td_atts") String tdAtts, @Field("td_block_id") String tdBlockId, @Field("td_column_number") int tdColumnNumber, @Field("td_current_page") int tdCurrentPage, @Field("block_type") String blockType, @Field("td_filter_value") String tdFilterValue, @Field("td_user_action") String tdUserAction);
 }

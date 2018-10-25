@@ -2,8 +2,6 @@ package com.u9porn.cookie;
 
 import android.text.TextUtils;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.franmontiel.persistentcookiejar.PersistentCookieJar;
 import com.orhanobut.logger.Logger;
 import com.u9porn.data.AppDataManager;
@@ -68,7 +66,7 @@ public class AppCookieManager implements CookieManager {
                 boolean isDigitsOnly = TextUtils.isDigitsOnly(cookie.value());
                 if (!isDigitsOnly) {
                     Logger.t(TAG).d("观看次数cookies异常");
-                    Bugsnag.notify(new Throwable(TAG + ":cookie watchTimes is not DigitsOnly"), Severity.WARNING);
+                 //   Bugsnag.notify(new Throwable(TAG + ":cookie watchTimes is not DigitsOnly"), Severity.WARNING);
                 }
                 return isDigitsOnly;
             }
@@ -102,7 +100,7 @@ public class AppCookieManager implements CookieManager {
                     @Override
                     public void onError(String msg, int code) {
                         Logger.t(TAG).d("重置观看次数出错了：" + msg);
-                        Bugsnag.notify(new Throwable(TAG + ":reset watchTimes error:" + msg), Severity.WARNING);
+                      //  Bugsnag.notify(new Throwable(TAG + ":reset watchTimes error:" + msg), Severity.WARNING);
                     }
                 });
     }

@@ -26,6 +26,8 @@ import com.u9porn.utils.GlideApp;
 
 import java.util.List;
 
+import okhttp3.HttpUrl;
+
 /**
  * @author flymegoc
  * @date 2018/1/25
@@ -71,7 +73,7 @@ public class PictureAdapter extends PagerAdapter {
                 }
             }).into(photoView);
         } else {
-            GlideApp.with(container).load(Uri.parse(url)).transition(new DrawableTransitionOptions().crossFade(300)).listener(new RequestListener<Drawable>() {
+            GlideApp.with(container).load(buildGlide99MMUrl(url)).transition(new DrawableTransitionOptions().crossFade(300)).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     progressBar.setVisibility(View.GONE);
@@ -148,6 +150,20 @@ public class PictureAdapter extends PagerAdapter {
                     .addHeader("Accept-Language", "zh-CN,zh;q=0.9,zh-TW;q=0.8")
                     .addHeader("Host", "i.meizitu.net")
                     .addHeader("Referer", "http://www.mzitu.com/")
+                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
+                    .build());
+        }
+    }
+
+    private GlideUrl buildGlide99MMUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        } else {
+            HttpUrl httpUrl=HttpUrl.parse(url);
+            return new GlideUrl(url, new LazyHeaders.Builder()
+                    .addHeader("Accept-Language", "zh-CN,zh;q=0.9,zh-TW;q=0.8")
+                    .addHeader("Host", httpUrl != null ? httpUrl.host() : "img.99mm.net")
+                    .addHeader("Referer", "http://www.99mm.me/")
                     .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
                     .build());
         }

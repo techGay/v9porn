@@ -20,22 +20,4 @@ public interface PlayVideoView extends BaseView {
     void errorParseVideoUrl(String errorMessage);
 
     void favoriteSuccess();
-
-    void setVideoCommentData(List<VideoComment> videoCommentList,boolean pullToRefresh);
-
-    void setMoreVideoCommentData(List<VideoComment> videoCommentList);
-
-    void noMoreVideoCommentData(String message);
-
-    void loadMoreVideoCommentError(String message);
-
-    void loadVideoCommentError(String message);
-
-    void commentVideoSuccess(String message);
-
-    void commentVideoError(String message);
-
-    void replyVideoCommentSuccess(String message);
-
-    void replyVideoCommentError(String message);
 }

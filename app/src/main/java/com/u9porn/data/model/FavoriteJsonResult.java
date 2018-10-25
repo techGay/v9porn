@@ -12,11 +12,10 @@ import java.util.List;
 
 public class FavoriteJsonResult {
     //收藏成功
-    public final static int FAVORITE_SUCCESS = 0;
+    public final static int FAVORITE_SUCCESS = 2;
     //收藏失败
     public final static int FAVORITE_FAIL = 1;
-    //已经收藏过了
-    public final static int FAVORITE_ALREADY = 2;
+
     //不能收藏自己的视频
     public final static int FAVORITE_YOURSELF = 3;
     /**

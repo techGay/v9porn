@@ -3,13 +3,17 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url "http://maven.aliyun.com/nexus/content/repositories/releases"
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2' // add plugin
-        classpath 'com.bugsnag:bugsnag-android-gradle-plugin:3.+'
+      //  classpath 'com.bugsnag:bugsnag-android-gradle-plugin:3.4.1'
+        classpath 'com.tencent.bugly:symtabfileuploader:2.1.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -21,6 +25,9 @@ allprojects {
         mavenCentral() // add repository
         maven { url "https://jitpack.io" }
         google()
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/repositories/releases/'
+        }
     }
 }
 
@@ -48,4 +55,5 @@ ext {
     espressoVersion = '2.2.2'
     exoPlayerVersion = "2.6.0"
     butterKnifeVersion = '8.8.1'
+    daggerVersion = '2.16'
 }

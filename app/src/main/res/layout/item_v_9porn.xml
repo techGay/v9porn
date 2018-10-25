@@ -12,7 +12,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/recycler_item_selector"
+        >
 
         <ImageView
             android:id="@+id/iv_91porn_item_img"

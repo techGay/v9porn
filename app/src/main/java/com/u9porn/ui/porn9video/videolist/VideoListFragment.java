@@ -1,6 +1,7 @@
 package com.u9porn.ui.porn9video.videolist;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +28,6 @@ import com.u9porn.ui.MvpFragment;
 import com.u9porn.utils.AppUtils;
 import com.u9porn.utils.LoadHelperUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,13 +37,12 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * 通用
+ * 通用视频列表加载
  * A simple {@link Fragment} subclass.
  *
  * @author flymegoc
  */
 public class VideoListFragment extends MvpFragment<VideoListView, VideoListPresenter> implements VideoListView, SwipeRefreshLayout.OnRefreshListener {
-
 
     private static final String TAG = VideoListFragment.class.getSimpleName();
     @BindView(R.id.recyclerView_common)
@@ -70,9 +69,19 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
 
     private SkipPageAdapter skipPageAdapter;
 
+    private int skipPage = 0;
+    private int position;
 
     public VideoListFragment() {
         // Required empty public constructor
+    }
+
+    public void setSkipPage(int skipPage) {
+        this.skipPage = skipPage;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public static VideoListFragment getInstance() {
@@ -82,15 +91,19 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<V9PornItem> mV9PornItemList = new ArrayList<>();
-        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);
+        Logger.t(TAG).d(category.getCategoryName()+"  VideoListFragment init..............");
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn);
         skipPageAdapter = new SkipPageAdapter(R.layout.item_skip_page);
     }
 
     @NonNull
     @Override
     public VideoListPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return videoListPresenter;
     }
 
@@ -106,24 +119,31 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        // Setup contentView == SwipeRefreshView
-        contentView.setOnRefreshListener(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(mV91PornAdapter);
         mV91PornAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 V9PornItem v9PornItems = (V9PornItem) adapter.getItem(position);
-                goToPlayVideo(v9PornItems, presenter.getPlayBackEngine());
+                goToPlayVideo(v9PornItems, presenter.getPlayBackEngine(), presenter.getPage(), position < 20 ? position : position % 20);
             }
         });
-        //使用缓存的FragmentPagerAdapter之后会导致新方法的加载更多失效，暂时切换回过时api，可正常运行
         mV91PornAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 presenter.loadVideoListData(false, false, category.getCategoryValue(), 0);
             }
         });
+        skipPageAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                int page = (int) adapter.getItem(position);
+                loadData(false, false, page);
+            }
+        });
+        // Setup contentView == SwipeRefreshView
+        contentView.setOnRefreshListener(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(mV91PornAdapter);
+
         helper = new LoadViewHelper(recyclerView);
         helper.setListener(new OnLoadViewListener() {
             @Override
@@ -142,13 +162,6 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
             skipPageLayout.setVisibility(View.VISIBLE);
             skipPageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             skipPageRecyclerView.setAdapter(skipPageAdapter);
-            skipPageAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    int page = (int) adapter.getItem(position);
-                    loadData(false, false, page);
-                }
-            });
         } else {
             skipPageLayout.setVisibility(View.GONE);
         }
@@ -156,7 +169,8 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
 
     @Override
     protected void onLazyLoadOnce() {
-        loadData(false, false, 0);
+        Logger.t(TAG).d(category.getCategoryName()+"  初次加载数据......");
+        loadData(false, false, skipPage);
     }
 
     @Override
@@ -167,9 +181,10 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
 
     @Override
     public void setData(List<V9PornItem> data) {
+        Logger.t(TAG).d(category.getCategoryName()+"  加载数据成功......");
         mV91PornAdapter.setNewData(data);
         mV91PornAdapter.disableLoadMoreIfNotFullPage(recyclerView);
-        recyclerView.smoothScrollToPosition(0);
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
     }
 
     @Override
@@ -179,7 +194,7 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
 
     @Override
     public void updateCurrentPage(final int currentPage) {
-        Logger.t(TAG).d("第《" + currentPage + "》页");
+        Logger.t(TAG).d(category.getCategoryName()+"第《" + currentPage + "》页");
         skipPageAdapter.setCurrentPage(currentPage);
         skipPageRecyclerView.postDelayed(new Runnable() {
             @Override

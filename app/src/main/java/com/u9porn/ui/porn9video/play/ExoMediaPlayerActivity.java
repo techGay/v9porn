@@ -10,11 +10,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.devbrackets.android.exomedia.listener.OnPreparedListener;
 import com.flymegoc.exolibrary.widget.ExoVideoControlsMobile;
 import com.flymegoc.exolibrary.widget.ExoVideoView;
-import com.liulishuo.filedownloader.model.FileDownloadStatus;
 import com.u9porn.R;
 import com.u9porn.utils.GlideApp;
-
-import java.io.File;
 
 /**
  * @author flymegoc
@@ -33,6 +30,7 @@ public class ExoMediaPlayerActivity extends BasePlayVideo implements OnPreparedL
 
     @Override
     public void initPlayerView() {
+        videoPlayerContainer.removeAllViews();
         View view = LayoutInflater.from(this).inflate(R.layout.playback_engine_exo_media, videoPlayerContainer, true);
         videoPlayer = view.findViewById(R.id.video_view);
         videoControlsMobile = (ExoVideoControlsMobile) videoPlayer.getVideoControls();
@@ -90,7 +88,9 @@ public class ExoMediaPlayerActivity extends BasePlayVideo implements OnPreparedL
 
     @Override
     protected void onDestroy() {
-        videoPlayerContainer.removeView(videoPlayer);
+        if (videoPlayer.getParent() != null) {
+            videoPlayerContainer.removeView(videoPlayer);
+        }
         videoPlayer.release();
         super.onDestroy();
     }

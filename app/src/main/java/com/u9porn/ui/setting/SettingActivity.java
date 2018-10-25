@@ -76,7 +76,6 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     @NonNull
     @Override
     public SettingPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return settingPresenter;
     }
 
@@ -112,17 +111,26 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         forumAddressItemWithChevron.setDetailText(TextUtils.isEmpty(forum91Address) ? "未设置" : forum91Address);
         forumAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
-        //朱古力视频地址
+        //ZhuGuLi视频地址
         QMUICommonListItemView pigAvAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_pa));
         pigAvAddressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
         String pigAvAddress = presenter.getPavAddress();
         pigAvAddressItemWithChevron.setDetailText(TextUtils.isEmpty(pigAvAddress) ? "未设置" : pigAvAddress);
         pigAvAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
+        //Axgle视频地址设置
+        QMUICommonListItemView axgleAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_axgle));
+        axgleAddressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
+        String axgleAddress = presenter.getAxgleAddress();
+        axgleAddressItemWithChevron.setDetailText(TextUtils.isEmpty(axgleAddress) ? "请设置API地址(注意，是带“api”字的地址)" : axgleAddress);
+        axgleAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
+
         //草榴地址
-        QMUICommonListItemView t66yAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_t6y));
-        t66yAddressItemWithChevron.setId(R.id.setting_item_t6y_forum_address);
-        t66yAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
+        QMUICommonListItemView t6yAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_t6y));
+        t6yAddressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
+        t6yAddressItemWithChevron.setId(R.id.setting_item_t6y_forum_address);
+        t6yAddressItemWithChevron.setDetailText("暂未支持，敬请期待");
+        t6yAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
         tsec.addItemView(addressItemWithChevron, new View.OnClickListener() {
             @Override
@@ -142,7 +150,13 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                 showAddressSettingDialog((QMUICommonListItemView) v, AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS);
             }
         });
-        tsec.addItemView(t66yAddressItemWithChevron, this);
+        tsec.addItemView(axgleAddressItemWithChevron, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddressSettingDialog((QMUICommonListItemView) v, AppPreferencesHelper.KEY_SP_AXGLE_ADDRESS);
+            }
+        });
+        tsec.addItemView(t6yAddressItemWithChevron, this);
         tsec.addTo(qmuiGroupListView);
 
         //播放引擎
@@ -208,7 +222,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
 
         //开启91视频跳页功能
         boolean isOpenSkipPage = presenter.isOpenSkipPage();
-        QMUICommonListItemView openSkipPageItemWithSwitch = qmuiGroupListView.createItemView("开启V9视频跳页功能");
+        QMUICommonListItemView openSkipPageItemWithSwitch = qmuiGroupListView.createItemView("开启V9PORN视频跳页功能");
         openSkipPageItemWithSwitch.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_SWITCH);
         openSkipPageItemWithSwitch.getSwitch().setChecked(isOpenSkipPage);
         openSkipPageItemWithSwitch.getSwitch().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -218,9 +232,22 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             }
         });
 
+        //服务器连接重定向时是否弹窗提示
+        boolean isShowUrlRedirectTipDialog = presenter.isShowUrlRedirectTipDialog();
+        QMUICommonListItemView showUrlRedirectTipDialogItemWithSwitch = qmuiGroupListView.createItemView("连接被服务器重定向时弹窗提示");
+        showUrlRedirectTipDialogItemWithSwitch.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_SWITCH);
+        showUrlRedirectTipDialogItemWithSwitch.getSwitch().setChecked(isShowUrlRedirectTipDialog);
+        showUrlRedirectTipDialogItemWithSwitch.getSwitch().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                presenter.setShowUrlRedirectTipDialog(isChecked);
+            }
+        });
+
         sec.addItemView(itemWithSwitch, null);
         sec.addItemView(itemWithSwitchForbidden, this);
         sec.addItemView(openSkipPageItemWithSwitch, null);
+        sec.addItemView(showUrlRedirectTipDialogItemWithSwitch, null);
         sec.addTo(qmuiGroupListView);
     }
 
@@ -321,6 +348,9 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                 case AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS:
                     autoCompleteTextView.setText(presenter.getPavAddress());
                     break;
+                case AppPreferencesHelper.KEY_SP_AXGLE_ADDRESS:
+                    autoCompleteTextView.setText(presenter.getAxgleAddress());
+                    break;
                 default:
             }
         }
@@ -376,6 +406,9 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             case AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS:
                 presenter.testPav(address, qmuiCommonListItemView, key);
                 break;
+            case AppPreferencesHelper.KEY_SP_AXGLE_ADDRESS:
+                presenter.testAxgle(address, qmuiCommonListItemView, key);
+                break;
             default:
         }
     }
@@ -403,6 +436,11 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                     RetrofitUrlManager.getInstance().putDomain(Api.PA_DOMAIN_NAME, presenter.getPavAddress());
                 }
                 break;
+            case AppPreferencesHelper.KEY_SP_AXGLE_ADDRESS:
+                if (!TextUtils.isEmpty(presenter.getAxgleAddress())) {
+                    RetrofitUrlManager.getInstance().putDomain(Api.AXGLE_DOMAIN_NAME, presenter.getAxgleAddress());
+                }
+                break;
             default:
         }
     }
@@ -424,6 +462,9 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                 break;
             case AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS:
                 presenter.setPavAddress(address);
+                break;
+            case AppPreferencesHelper.KEY_SP_AXGLE_ADDRESS:
+                presenter.setAxgleAddress(address);
                 break;
             default:
         }

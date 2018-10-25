@@ -951,10 +951,10 @@ public class ExoVideoView extends RelativeLayout {
         public void onVideoSizeChanged(int width, int height, int unAppliedRotationDegrees, float pixelWidthHeightRatio) {
             //NOTE: Android 5.0+ will always have an unAppliedRotationDegrees of 0 (ExoPlayer already handles it)
             videoViewImpl.setVideoRotation(unAppliedRotationDegrees, false);
-            videoViewImpl.onVideoSizeChanged(width, height);
+            videoViewImpl.onVideoSizeChanged(width, height,pixelWidthHeightRatio);
 
             if (videoSizeChangedListener != null) {
-                videoSizeChangedListener.onVideoSizeChanged(width, height);
+                videoSizeChangedListener.onVideoSizeChanged(width, height,pixelWidthHeightRatio);
             }
         }
 
@@ -1030,6 +1030,7 @@ public class ExoVideoView extends RelativeLayout {
                 if (stepVolume == 0) {
                     int max = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
                     int current = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    videoViewImpl.getVolume();
                     stepVolume = ((float) current / max) * 1;
                     Log.d("AAAAA", "max : " + max + "current : " + stepVolume);
                 }
