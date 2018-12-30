@@ -4,7 +4,6 @@ import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.model.FileDownloadStatus;
@@ -16,7 +15,6 @@ import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.di.ApplicationContext;
-import com.u9porn.di.PerActivity;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.utils.AppCacheUtils;
@@ -45,7 +43,6 @@ import io.reactivex.schedulers.Schedulers;
  * @describe
  */
 
-@PerActivity
 public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements IDownload {
 
     private DataManager dataManager;

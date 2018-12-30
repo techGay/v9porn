@@ -1,9 +1,9 @@
 {
   "noticeMessage": "
-    当前1.0.5版本9*porn视频如果不是从主界面列表进入播放界面，均会造成程序崩溃，请静待更新，如影响使用，退回1.0.4即可。
+    当前1.0.7版本因为代码改动，导致没有适配到JiaoZiPlayer播放引擎导致崩溃，所以请使用google exoplayer播放引擎即可，后续基本只会更新升级exoplayer,jiaoziplayer只会修复。
   ",
-  "noticeTime": "2018年8月21日",
+  "noticeTime": "2018年10月2日",
    "noticeTitle": "公告",
    "noticeer": "Adimn",
-   "versionCode": 2
+   "versionCode": 3
  }

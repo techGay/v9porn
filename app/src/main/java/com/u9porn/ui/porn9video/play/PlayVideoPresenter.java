@@ -4,18 +4,13 @@ import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.model.User;
-import com.u9porn.data.model.VideoComment;
-import com.u9porn.di.PerActivity;
 import com.u9porn.exception.VideoException;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RetryWhenProcess;
@@ -24,7 +19,6 @@ import com.u9porn.ui.download.DownloadPresenter;
 import com.u9porn.ui.porn9video.favorite.FavoritePresenter;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -36,7 +30,6 @@ import io.reactivex.functions.Function;
  * @date 2017/11/15
  * @describe
  */
-@PerActivity
 public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implements IPlay {
 
     private static final String TAG = PlayVideoPresenter.class.getSimpleName();
@@ -68,7 +61,7 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                             if (VideoResult.OUT_OF_WATCH_TIMES.equals(videoResult.getId())) {
                                 //尝试强行重置，并上报异常
                                 dataManager.resetPorn91VideoWatchTime(true);
-                                Bugsnag.notify(new Throwable(TAG + "Ten videos each day address: " + dataManager.getPorn9VideoAddress()), Severity.WARNING);
+                               // Bugsnag.notify(new Throwable(TAG + "Ten videos each day address: " + dataManager.getPorn9VideoAddress()), Severity.WARNING);
                                 throw new VideoException("观看次数达到上限了,请更换地址或者代理服务器！");
                             } else {
                                 throw new VideoException("解析视频链接失败了");

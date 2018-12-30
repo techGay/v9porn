@@ -3,10 +3,9 @@ package com.u9porn.ui.pav.playpav;
 import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
-import com.u9porn.data.model.PavVideoParserJsonResult;
+import com.u9porn.data.model.pxgav.PavVideoParserJsonResult;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.ui.MvpBasePresenter;

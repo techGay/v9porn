@@ -1,7 +1,5 @@
 package com.u9porn.data.db;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.github.yuweiguocn.library.greendao.MigrationHelper;
 import com.liulishuo.filedownloader.model.FileDownloadStatus;
 import com.u9porn.BuildConfig;
@@ -111,7 +109,7 @@ public class AppDbHelper implements DbHelper {
                 v9PornItemDao.delete(v9PornItem);
             }
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable("findV9PornItemDaoByViewKey DaoException", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable("findV9PornItemDaoByViewKey DaoException", e), Severity.WARNING);
             }
             e.printStackTrace();
         }
@@ -125,7 +123,7 @@ public class AppDbHelper implements DbHelper {
         } catch (Exception e) {
             //暂时先不处理这问题了，理论上一个不会发生，因为时根据url生成
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable("findV9PornItemDaoByDownloadId DaoException", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable("findV9PornItemDaoByDownloadId DaoException", e), Severity.WARNING);
             }
             e.printStackTrace();
         }

@@ -81,8 +81,7 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         List<String> dataSetSearch = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.search)));
         niceSpinnerSearch.attachDataSource(dataSetSearch);
 
-        List<V9PornItem> mV9PornItemList = new ArrayList<>();
-        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);
+        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn);
         mV91PornAdapter.openLoadAnimation();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mV91PornAdapter);
@@ -206,7 +205,6 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
     @NonNull
     @Override
     public SearchPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return searchPresenter;
     }
 

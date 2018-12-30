@@ -4,11 +4,13 @@ import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.di.PerActivity;
+import com.u9porn.di.PerFragment;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RetryWhenProcess;
 import com.u9porn.rxjava.RxSchedulersHelper;
@@ -26,9 +28,10 @@ import io.reactivex.functions.Function;
  * @author flymegoc
  * @date 2017/11/16
  */
-@PerActivity
+
 public class VideoListPresenter extends MvpBasePresenter<VideoListView> implements IVideoList {
 
+    private static final String TAG = VideoListFragment.class.getSimpleName();
     private Integer totalPage = 1;
     private int page = 1;
     private LifecycleProvider<Lifecycle.Event> provider;
@@ -43,6 +46,7 @@ public class VideoListPresenter extends MvpBasePresenter<VideoListView> implemen
     public VideoListPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         this.provider = provider;
         this.dataManager = dataManager;
+        Logger.t(TAG).d("VideoListPresenter init______________");
     }
 
     @Override

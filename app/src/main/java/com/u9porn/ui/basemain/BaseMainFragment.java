@@ -25,8 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.devbrackets.android.exomedia.util.ResourceUtil;
 import com.orhanobut.logger.Logger;
@@ -38,7 +36,6 @@ import com.u9porn.adapter.SortCategoryAdapter;
 import com.u9porn.data.db.entity.Category;
 import com.u9porn.eventbus.LowMemoryEvent;
 import com.u9porn.ui.MvpFragment;
-import com.u9porn.ui.porn9video.Main9PronVideoFragment;
 import com.u9porn.utils.AnimationUtils;
 import com.u9porn.utils.FragmentUtils;
 
@@ -63,8 +60,7 @@ import butterknife.Unbinder;
  */
 public abstract class BaseMainFragment extends MvpFragment<BaseMainView, BaseMainPresenter> implements BaseMainView, View.OnClickListener, SortCategoryAdapter.OnStartDragListener {
 
-
-    private static final String TAG = Main9PronVideoFragment.class.getSimpleName();
+    private static final String TAG = BaseMainFragment.class.getSimpleName();
     @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.iv_sort_category)
@@ -118,7 +114,6 @@ public abstract class BaseMainFragment extends MvpFragment<BaseMainView, BaseMai
     @NonNull
     @Override
     public BaseMainPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return baseMainPresenter;
     }
 
@@ -396,7 +391,7 @@ public abstract class BaseMainFragment extends MvpFragment<BaseMainView, BaseMai
             return;
         }
         if (!BuildConfig.DEBUG) {
-            Bugsnag.notify(new Throwable(TAG + ":LowMemory,try to release some memory now!"), Severity.INFO);
+            //Bugsnag.notify(new Throwable(TAG + ":LowMemory,try to release some memory now!"), Severity.INFO);
         }
         try {
             Logger.t(TAG).d("start try to release memory ....");
@@ -422,7 +417,7 @@ public abstract class BaseMainFragment extends MvpFragment<BaseMainView, BaseMai
         } catch (Exception e) {
             e.printStackTrace();
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable(TAG + " tryToReleaseMemory error::", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable(TAG + " tryToReleaseMemory error::", e), Severity.WARNING);
             }
         }
     }

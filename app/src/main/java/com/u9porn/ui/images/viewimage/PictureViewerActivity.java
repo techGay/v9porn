@@ -74,7 +74,6 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
     @NonNull
     @Override
     public PictureViewerPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return pictureViewerPresenter;
     }
 

@@ -1,7 +1,9 @@
 {
-"apkDownloadUrl": "https://raw.githubusercontent.com/techGay/v9porn/master/apk/app-v1.0.6.apk",
-"updateMessage": "1. 简单修复不是从主界面进入9*pron播放界面崩溃的bug
+"apkDownloadUrl": "https://raw.githubusercontent.com/techGay/v9porn/master/apk/app-v1.0.8.apk",
+"updateMessage": "
+                  1. 修复适配JiaoZiVideoPlayer播放引擎\n
+                  2. 修复9*PORN除主页外其他分类打开崩溃的Bug
 ",
-"versionCode": 7,
-"versionName": "1.0.6"
+"versionCode": 9,
+"versionName": "1.0.8"
 }

@@ -181,7 +181,6 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
     @NonNull
     @Override
     public Browse9Presenter createPresenter() {
-        getActivityComponent().inject(this);
         return browse9Presenter;
     }
 

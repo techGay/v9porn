@@ -47,7 +47,6 @@ import butterknife.Unbinder;
  */
 public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresenter> implements DownloadManager.DownloadStatusUpdater, DownloadView {
 
-
     @BindView(R.id.recyclerView_download_finish)
     RecyclerView recyclerView;
     Unbinder unbinder;
@@ -72,7 +71,6 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
     @NonNull
     @Override
     public DownloadPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return downloadPresenter;
     }
 

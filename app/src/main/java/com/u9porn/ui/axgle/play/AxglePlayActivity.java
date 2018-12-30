@@ -66,7 +66,6 @@ public class AxglePlayActivity extends MvpActivity<AxglePlayView, AxglePlayPrese
     @NonNull
     @Override
     public AxglePlayPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return axglePlayPresenter;
     }
 

@@ -9,9 +9,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.di.ApplicationContext;
-import com.u9porn.di.PerActivity;
-import com.u9porn.rxjava.CallBackWrapper;
-import com.u9porn.rxjava.RxSchedulersHelper;
 
 import javax.inject.Inject;
 
@@ -23,7 +20,6 @@ import retrofit2.Response;
 /**
  * @author megoc
  */
-@PerActivity
 public class AxglePlayPresenter extends MvpBasePresenter<AxglePlayView> implements IAxglePlay {
     private DataManager dataManager;
     private LifecycleProvider<Lifecycle.Event> provider;

@@ -88,7 +88,7 @@ public class Parse99Mm {
 
         Element elementBox = doc.getElementById("picbox");
         String imgUrl = elementBox.selectFirst("img").attr("src").trim();
-        HttpUrl httpUrl=HttpUrl.parse(imgUrl);
+        HttpUrl httpUrl = HttpUrl.parse(imgUrl);
         Element element = doc.body().select("script").first();
         String javaScript = element.toString();
         String data = StringUtils.subString(javaScript, javaScript.indexOf("'") + 1, javaScript.lastIndexOf(";") - 1);
@@ -103,14 +103,16 @@ public class Parse99Mm {
         List<String> stringImageList = new ArrayList<>();
         String jmPicUrl;
         for (int i = 8; i < ids.length; i++) {
-            if (httpUrl==null){
+            if (httpUrl == null) {
                 jmPicUrl = "http://" + jmImgUrl[Integer.parseInt(ids[1])] + ".99mm.net/" + ids[4] + "/" + ids[5] + "/" + (i - 7) + "-" + ids[i].toLowerCase() + ".jpg";
-            }else {
+            } else if (!ids[5].equals("\"n\"")) {
                 jmPicUrl = "http://" + httpUrl.host() + "/" + ids[4] + "/" + ids[5] + "/" + (i - 7) + "-" + ids[i].toLowerCase() + ".jpg";
+            } else {
+                jmPicUrl = "http://" + httpUrl.host() + "/" + ids[1]  + (i - 7) + "-" + ids[i-2].toLowerCase() + ".jpg";
             }
 
             Logger.t(TAG).d(jmPicUrl);
-            stringImageList.add(jmPicUrl);
+            stringImageList.add(jmPicUrl.replace("\"", ""));
         }
         return stringImageList;
 

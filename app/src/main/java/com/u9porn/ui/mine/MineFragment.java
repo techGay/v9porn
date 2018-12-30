@@ -91,7 +91,6 @@ public class MineFragment extends MvpFragment<MineView, MinePresenter> implement
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
     }
 
     @Override
@@ -105,7 +104,6 @@ public class MineFragment extends MvpFragment<MineView, MinePresenter> implement
     @NonNull
     @Override
     public MinePresenter createPresenter() {
-        getActivityComponent().inject(this);
         return minePresenter;
     }
 

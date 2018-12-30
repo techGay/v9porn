@@ -70,8 +70,7 @@ public class AuthorActivity extends MvpActivity<AuthorView, AuthorPresenter> imp
             }
         });
         swipeLayout.setEnabled(false);
-        List<V9PornItem> mV9PornItemList = new ArrayList<>();
-        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);
+        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mV91PornAdapter);
 
@@ -107,7 +106,6 @@ public class AuthorActivity extends MvpActivity<AuthorView, AuthorPresenter> imp
     @NonNull
     @Override
     public AuthorPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return authorPresenter;
     }
 

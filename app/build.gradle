@@ -1,18 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
-apply plugin: 'com.bugsnag.android.gradle' // apply on last line
+//apply plugin: 'com.bugsnag.android.gradle' // apply on last line
+apply plugin: 'bugly'
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.u9porn"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 7
-        versionName "1.0.6"
+        versionCode 9
+        versionName "1.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' , 'x86', 'armeabi-v7a'//, 'x86_64', 'arm64-v8a'
+        }
     }
     buildTypes {
         debug {
@@ -23,20 +28,35 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-fresco.pro'
         }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
 }
 
 greendao {
     schemaVersion 4//数据库版本号
 }
 
+bugly {
+    appId = '' // 注册时分配的App ID
+    appKey = '' // 注册时分配的App Key
+    appVersion ='1.0.7' //App版本
+    execute = true //插件开关
+    upload = true //上传开关
+    uploadMapping =true //Mapping文件上传开关
+    uploadSymbol = true //Symbol文件上传开关
+}
+/*
 bugsnag {
-    autoUpload true //自动上传ProGuard mapping file
+    autoUpload false //自动上传ProGuard mapping file
     ndk false //上传ndk mapping
     autoReportBuilds false //report builds to Bugsnag
     retryCount 5 //Retrying the file upload
 }
-
+*/
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -46,7 +66,7 @@ dependencies {
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.android.support:support-vector-drawable:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -72,7 +92,7 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:2.2.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    implementation 'com.danikula:videocache:2.7.0'
+    implementation 'com.danikula:videocache:2.7.1'
     //rxcache
     implementation 'com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x'
     // To use Gson
@@ -84,7 +104,7 @@ dependencies {
     implementation 'com.yanzhenjie:permission:1.1.2'
     implementation 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
     //https://app.bugsnag.com/accounts/cbs-1/projects/android/integrate bug收集
-    implementation 'com.bugsnag:bugsnag-android:4.5.0'
+    //implementation 'com.bugsnag:bugsnag-android:4.5.0'
     implementation 'com.github.rubensousa:floatingtoolbar:1.5.1'
     implementation 'com.qmuiteam:qmui:1.1.5'
     implementation 'com.github.arcadefire:nice-spinner:1.3.1'
@@ -94,7 +114,7 @@ dependencies {
     implementation 'com.github.yuweiguocn:GreenDaoUpgradeHelper:v2.0.1'
     implementation 'cn.bingoogolapple:bga-swipebacklayout:1.1.9@aar'
     implementation 'com.jaeger.statusbarutil:library:1.4.0'
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.2'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
     implementation('com.github.bumptech.glide:glide:4.7.1') {
         exclude group: "com.android.support"
     }
@@ -105,12 +125,19 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.oushangfeng:PinnedSectionItemDecoration:1.2.4'
     implementation 'cn.pedant.safewebviewbridge:library:1.4'
-    //dagger2
-    implementation 'com.google.dagger:dagger:2.14.1'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    // Dagger2 dependencies
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     implementation('cn.qqtheme.framework:FilePicker:1.5.5') {
         exclude group: 'com.android.support'
     }
     implementation project(':exolibrary')
+
+    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.6'
 }

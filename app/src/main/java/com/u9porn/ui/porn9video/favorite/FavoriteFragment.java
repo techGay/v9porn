@@ -43,7 +43,6 @@ public class FavoriteFragment extends MvpFragment<FavoriteView,FavoritePresenter
     @NonNull
     @Override
     public FavoritePresenter createPresenter() {
-        getActivityComponent().inject(this);
         return favoritePresenter;
     }
 }

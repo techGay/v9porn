@@ -165,6 +165,8 @@ public class UpdateDownloadService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationChannelHelper.CHANNEL_ID_FOR_UPDATE);
         builder.setContentTitle("正在下载");
+        //只响铃震动一次
+        builder.setOnlyAlertOnce(true);
         builder.setSmallIcon(R.mipmap.ic_launcher_round);
         RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.layout_download_apk);
 

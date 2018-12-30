@@ -76,7 +76,6 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     @NonNull
     @Override
     public SettingPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return settingPresenter;
     }
 

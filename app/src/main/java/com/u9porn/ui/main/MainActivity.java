@@ -10,15 +10,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.devbrackets.android.exomedia.util.ResourceUtil;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
@@ -26,9 +23,13 @@ import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
+import com.taobao.sophix.SophixManager;
 import com.u9porn.BuildConfig;
 import com.u9porn.R;
+import com.u9porn.constants.Constants;
+import com.u9porn.constants.Keys;
 import com.u9porn.constants.KeysActivityRequestResultCode;
+import com.u9porn.constants.PermissionConstants;
 import com.u9porn.data.model.Notice;
 import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.data.network.Api;
@@ -48,15 +49,12 @@ import com.u9porn.ui.pav.MainPavFragment;
 import com.u9porn.ui.porn9forum.Main9ForumFragment;
 import com.u9porn.ui.porn9video.Main9PronVideoFragment;
 import com.u9porn.ui.porn9video.search.SearchActivity;
-import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.ui.porn9video.user.UserLoginActivity;
+import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.utils.ApkVersionUtils;
 import com.u9porn.utils.FragmentUtils;
 import com.u9porn.utils.NotificationChannelHelper;
 import com.u9porn.utils.SDCardUtils;
-import com.u9porn.constants.Constants;
-import com.u9porn.constants.Keys;
-import com.u9porn.constants.PermissionConstants;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
@@ -131,7 +129,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         initBottomNavigationBar(selectIndex);
         checkUpdate();
         checkNewNotice();
-        makeDirAndCheckPermision();
+        makeDirAndCheckPermission();
 
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +141,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         firstTabShow = presenter.getMainFirstTabShow();
         secondTabShow = presenter.getMainSecondTabShow();
         doOnTabSelected(selectIndex);
-
+        SophixManager.getInstance().queryAndLoadNewPatch();
     }
 
 
@@ -169,9 +167,9 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     private void showVideoBottomSheet(final int checkIndex) {
         new QMUIBottomSheet.BottomListSheetBuilder(this, true)
-                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_search_black_24dp), "搜索V9PORN视频")
+                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_search_black_24dp), "搜索9*PORN视频")
                 .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_file_download_black_24dp), "我的下载")
-                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_video_library_black_24dp), "V9PORN视频")
+                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_video_library_black_24dp), "9*PORN视频")
                 .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_video_library_black_24dp), "ZhuGuLi视频")
                 .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_video_library_black_24dp), "A*gle视频")
                 .setCheckedIndex(checkIndex)
@@ -215,7 +213,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     private void showForumBottomSheet(int selectIndex) {
         new QMUIBottomSheet.BottomListSheetBuilder(this, true)
-                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_library_books_black_24dp), "V9FORUM论坛")
+                .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_library_books_black_24dp), "9*PORN论坛")
                 .addItem(ResourceUtil.getDrawable(this, R.drawable.ic_library_books_black_24dp), "CaoLiu社区")
                 .setCheckedIndex(selectIndex)
                 .setOnSheetItemClickListener(new QMUIBottomSheet.BottomListSheetBuilder.OnSheetItemClickListener() {
@@ -403,7 +401,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     private void hideFloatingActionButton(FloatingActionButton fabSearch) {
         ViewGroup.LayoutParams layoutParams = fabSearch.getLayoutParams();
-        if (layoutParams != null && layoutParams instanceof CoordinatorLayout.LayoutParams) {
+        if (layoutParams instanceof CoordinatorLayout.LayoutParams) {
             CoordinatorLayout.LayoutParams coLayoutParams = (CoordinatorLayout.LayoutParams) layoutParams;
             FloatingActionButton.Behavior behavior = new FloatingActionButton.Behavior();
             coLayoutParams.setBehavior(behavior);
@@ -430,7 +428,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     /**
      * 申请权限并创建下载目录
      */
-    private void makeDirAndCheckPermision() {
+    private void makeDirAndCheckPermission() {
         if (!AndPermission.hasPermission(MainActivity.this, permission)) {
             AndPermission.with(this)
                     .requestCode(permisionCode)
@@ -519,7 +517,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void onBackPressed() {
-        if (mCurrentFragment != null && mCurrentFragment instanceof BaseMainFragment && ((BaseMainFragment) mCurrentFragment).onBackPressed()) {
+        if (mCurrentFragment instanceof BaseMainFragment && ((BaseMainFragment) mCurrentFragment).onBackPressed()) {
             return;
         }
         showMessage("再次点击退出程序", TastyToast.INFO);
@@ -591,7 +589,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     @NonNull
     @Override
     public MainPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return mainPresenter;
     }
 
@@ -689,7 +686,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             return;
         }
         if (!BuildConfig.DEBUG) {
-            Bugsnag.notify(new Throwable(TAG + ":LowMemory,try to release some memory now!"), Severity.INFO);
+            //Bugsnag.notify(new Throwable(TAG + ":LowMemory,try to release some memory now!"), Severity.INFO);
         }
         try {
             Logger.t(TAG).d("start try to release memory ....");
@@ -713,7 +710,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         } catch (Exception e) {
             e.printStackTrace();
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable(TAG + " tryToReleaseMemory error::", e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable(TAG + " tryToReleaseMemory error::", e), Severity.WARNING);
             }
         }
     }

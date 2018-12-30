@@ -22,6 +22,7 @@ import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.HuaBanAdapter;
 import com.u9porn.data.model.HuaBan;
+import com.u9porn.di.PerFragment;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.images.viewimage.PhotoImageActivity;
 import com.u9porn.utils.AppUtils;
@@ -102,7 +103,6 @@ public class HuaBanFragment extends MvpFragment<HuaBanView, HuaBanPresenter> imp
     @NonNull
     @Override
     public HuaBanPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return huaBanPresenter;
     }
     private static final String OPTION_IMAGE = "img";

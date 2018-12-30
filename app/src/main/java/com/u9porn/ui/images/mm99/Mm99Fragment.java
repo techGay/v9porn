@@ -74,8 +74,6 @@ public class Mm99Fragment extends MvpFragment<Mm99View, Mm99Presenter> implement
     @NonNull
     @Override
     public Mm99Presenter createPresenter() {
-        getActivityComponent().inject(this);
-
         return mm99Presenter;
     }
 

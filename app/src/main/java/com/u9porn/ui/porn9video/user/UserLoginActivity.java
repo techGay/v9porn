@@ -171,7 +171,6 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     @NonNull
     @Override
     public UserPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return userPresenter;
     }
 

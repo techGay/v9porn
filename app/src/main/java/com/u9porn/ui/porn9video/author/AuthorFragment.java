@@ -69,8 +69,7 @@ public class AuthorFragment extends MvpFragment<AuthorView, AuthorPresenter> imp
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        List<V9PornItem> mV9PornItemList = new ArrayList<>();
-        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);
+        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn);
         mV91PornAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -179,7 +178,6 @@ public class AuthorFragment extends MvpFragment<AuthorView, AuthorPresenter> imp
     @NonNull
     @Override
     public AuthorPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return authorPresenter;
     }
 

@@ -94,7 +94,6 @@ public class AxgleFragment extends MvpFragment<AxgleView, AxglePresenter> implem
     @NonNull
     @Override
     public AxglePresenter createPresenter() {
-        getActivityComponent().inject(this);
         return axglePresenter;
     }
 

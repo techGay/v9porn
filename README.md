@@ -15,6 +15,20 @@ rxjava+retrofit+rxcache+mvp+jsoup+dagger2
 
 ### 更新日志：
 
+------2018年10月4日 v1.0.8
+1. 修复适配JiaoZiVideoPlayer播放引擎
+2. 修复9*PORN除主页外其他分类打开崩溃的Bug
+
+------2018年10月2日 v1.0.7
+
+本版本代码改动较大，可能隐藏有较多的bug
+
+1. 修复朱*力视频无法解析问题
+2. 修复九妹图社无法解析图片列表图片错误问题
+3. 下载增加重试下载功能[Archive94](https://github.com/Archive94)
+4. 修复9*PORN登陆账号后可能会有20次观看次数限制问题[Archive94](https://github.com/Archive94)
+5. 其他改动调整及bug修复
+
 ------2018年8月19日 v1.0.6
 
 1. 修复#49 #51导致的崩溃的bug
@@ -57,6 +71,10 @@ a*gle 视频地址解析来自项目[JAViewer](https://github.com/SplashCodes/JA
 
 **注意：v1.0.1以下版本需要手动下载apk并卸载重新安装，否则程序崩溃且下版本无法自动更新**
 
+### APK下载
+
+程序带自动检查更新升级功能，如若不能自动更新，在[APK](https://github.com/techGay/v9porn/tree/master/apk)目录手动下载升级即可
+
 ### 编译环境
 
 请用最新版AndroidStudio（至少3.0以上），个人本地基本都是有更新就更新
@@ -77,6 +95,8 @@ Windows 10 10.0
 觉得项目不错，给个start或赞赏，请我喝杯咖啡：
 
 ![赞赏](https://github.com/techGay/v9porn/blob/master/img/mm_reward_qrcode_1532268036853.png)
+
+感谢大家的赞赏，除非遇到不可抗力的因素，本项目会持续更新..
 
 ### 声明
 本项目仅做技术交流使用，任何人或组织无论以何种形式将其用在其他任何地方由此引发的各种问题均与本人无关

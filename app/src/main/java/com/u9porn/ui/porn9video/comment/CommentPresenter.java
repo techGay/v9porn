@@ -19,6 +19,9 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author megoc
+ */
 public class CommentPresenter extends MvpBasePresenter<CommentView> implements IComment {
 
     private static final String TAG = CommentPresenter.class.getSimpleName();

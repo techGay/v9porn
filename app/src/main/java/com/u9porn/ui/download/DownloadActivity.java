@@ -49,7 +49,6 @@ public class DownloadActivity extends BaseAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_download);
         ButterKnife.bind(this);
-        getActivityComponent().inject(this);
         initToolBar(toolbar);
 
         fragmentList.add(downloadingFragment);

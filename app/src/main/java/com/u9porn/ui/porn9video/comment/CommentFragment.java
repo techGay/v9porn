@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
@@ -29,13 +28,10 @@ import com.u9porn.constants.Keys;
 import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.model.VideoComment;
-import com.u9porn.di.PerActivity;
-import com.u9porn.ui.BaseFragment;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.AppUtils;
 import com.u9porn.utils.DialogUtils;
-import com.u9porn.utils.LoadHelperUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +40,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -299,7 +294,6 @@ public class CommentFragment extends MvpFragment<CommentView, CommentPresenter> 
     @NonNull
     @Override
     public CommentPresenter createPresenter() {
-        getActivityComponent().inject(this);
         Logger.t(TAG).d("createPresenter初始化了.....");
         return commentPresenter;
     }

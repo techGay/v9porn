@@ -216,7 +216,6 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
     @NonNull
     @Override
     public AboutPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return aboutPresenter;
     }
 

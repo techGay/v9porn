@@ -2,13 +2,10 @@ package com.u9porn.exception;
 
 import android.net.ParseException;
 
-import com.bugsnag.android.Bugsnag;
-import com.bugsnag.android.Severity;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
 import com.orhanobut.logger.Logger;
 import com.u9porn.BuildConfig;
-import com.u9porn.MyApplication;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.greenrobot.greendao.DaoException;
@@ -111,7 +108,7 @@ public class ApiException extends Exception {
             return ex;
         } else if (e instanceof NullPointerException) {
             if (!BuildConfig.DEBUG) {
-                Bugsnag.notify(new Throwable("NullPointerException:" + MyApplication.getInstance().getDataManager().getPorn9VideoAddress() + ":::" + MyApplication.getInstance().getDataManager().getPorn9ForumAddress(), e), Severity.WARNING);
+                //Bugsnag.notify(new Throwable("NullPointerException:" + MyApplication.getInstance().getDataManager().getPorn9VideoAddress() + ":::" + MyApplication.getInstance().getDataManager().getPorn9ForumAddress(), e), Severity.WARNING);
             }
             ex = new ApiException(e, Error.NULLPOINTER_EXCEPTION);
             ex.message = "NullPointerException";

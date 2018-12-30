@@ -8,7 +8,6 @@ import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.axgle.AxgleResponse;
 import com.u9porn.data.model.axgle.AxgleVideo;
-import com.u9porn.di.PerActivity;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 
@@ -22,7 +21,6 @@ import io.reactivex.functions.Function;
 /**
  * @author megoc
  */
-@PerActivity
 public class AxglePresenter extends MvpBasePresenter<AxgleView> implements IAxgle {
     private DataManager dataManager;
     private LifecycleProvider<Lifecycle.Event> provider;

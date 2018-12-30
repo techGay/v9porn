@@ -133,7 +133,6 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
     @NonNull
     @Override
     public UserPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return userPresenter;
     }
 

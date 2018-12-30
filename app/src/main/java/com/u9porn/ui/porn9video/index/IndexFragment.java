@@ -49,7 +49,7 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
     SwipeRefreshLayout contentView;
 
     private V91PornAdapter mV91PornAdapter;
-    private List<V9PornItem> mV9PornItemList;
+
     private LoadViewHelper helper;
 
     @Inject
@@ -71,14 +71,12 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mV9PornItemList = new ArrayList<>();
-        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);
+        mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn);
     }
 
     @NonNull
     @Override
     public IndexPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return indexPresenter;
     }
 
@@ -103,7 +101,7 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
         mV91PornAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                V9PornItem v9PornItems = mV9PornItemList.get(position);
+                V9PornItem v9PornItems = (V9PornItem) adapter.getData().get(position);
                 goToPlayVideo(v9PornItems, presenter.getPlayBackEngine(), 0, position);
             }
         });
@@ -130,8 +128,7 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
 
     @Override
     public void setData(List<V9PornItem> data) {
-        mV9PornItemList.clear();
-        mV9PornItemList.addAll(data);
+        mV91PornAdapter.setNewData(data);
         mV91PornAdapter.notifyDataSetChanged();
         ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(position,0);
     }

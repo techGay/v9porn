@@ -23,12 +23,13 @@ import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.PaAdapter;
-import com.u9porn.data.model.PavModel;
-import com.u9porn.data.model.PavVideoParserJsonResult;
+import com.u9porn.data.model.pxgav.PavModel;
+import com.u9porn.data.model.pxgav.PavVideoParserJsonResult;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.GlideApp;
 import com.u9porn.constants.Keys;
+import com.u9porn.utils.MyHeaderInjector;
 
 import java.util.List;
 
@@ -56,6 +57,10 @@ public class PlayPavActivity extends MvpActivity<PlayPavView, PlayPavPresenter> 
     @Inject
     protected PlayPavPresenter playPigAvPresenter;
 
+    @Inject
+    protected MyHeaderInjector myHeaderInjector;
+    private PavModel pavModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +76,7 @@ public class PlayPavActivity extends MvpActivity<PlayPavView, PlayPavPresenter> 
                 onBackPressed();
             }
         });
-        PavModel pavModel = (PavModel) getIntent().getSerializableExtra(Keys.KEY_INTENT_PAV_ITEM);
+        pavModel = (PavModel) getIntent().getSerializableExtra(Keys.KEY_INTENT_PAV_ITEM);
         if (pavModel != null) {
             parseVideoUrl(pavModel);
         } else {
@@ -114,8 +119,6 @@ public class PlayPavActivity extends MvpActivity<PlayPavView, PlayPavPresenter> 
     @NonNull
     @Override
     public PlayPavPresenter createPresenter() {
-        getActivityComponent().inject(this);
-
         return playPigAvPresenter;
     }
 
@@ -155,13 +158,12 @@ public class PlayPavActivity extends MvpActivity<PlayPavView, PlayPavPresenter> 
     public void playVideo(PavVideoParserJsonResult pavVideoParserJsonResult) {
         String url = pavVideoParserJsonResult.getFile();
         GlideApp.with(context).load(pavVideoParserJsonResult.getImage()).into(videoPlayer.getPreviewImageView());
-        if (TextUtils.isEmpty(url) && pavVideoParserJsonResult.getSources() != null && pavVideoParserJsonResult.getSources().size() > 0) {
-            url = pavVideoParserJsonResult.getSources().get(0).getFile();
-        }
         if (TextUtils.isEmpty(url)) {
             showMessage("播放地址无效", TastyToast.ERROR);
             return;
         }
+        myHeaderInjector.getHashMap().put("Referer",pavModel.getContentUrl());
+        myHeaderInjector.addHeaders(url);
         String proxyUrl = presenter.getVideoCacheProxyUrl(url);
         videoPlayer.setVideoURI(Uri.parse(proxyUrl));
     }

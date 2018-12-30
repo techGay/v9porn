@@ -105,9 +105,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     protected AuthorFragment authorFragment;
 
     @Inject
-    protected VideoListFragment videoListFragment;
-
-    @Inject
     protected PlayFragmentAdapter playFragmentAdapter;
 
     @Inject
@@ -259,7 +256,6 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     @NonNull
     @Override
     public PlayVideoPresenter createPresenter() {
-        getActivityComponent().inject(this);
         return playVideoPresenter;
     }
 
