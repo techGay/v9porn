@@ -212,7 +212,7 @@ public class ParseV9PronVideo {
         }
 
 
-        final String reg = "document.write\\(strencode\\(\"(.+)\",\"(.+)\",.+\\)\\);";
+        /*final String reg = "document.write\\(strencode\\(\"(.+)\",\"(.+)\",.+\\)\\);";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(html);
         String param1 = "", param2 = "";
@@ -234,6 +234,11 @@ public class ParseV9PronVideo {
         Document source = Jsoup.parse(source_str);
         String videoUrl = source.select("source").first().attr("src");
         videoResult.setVideoUrl(videoUrl);
+        Logger.t(TAG).d("视频链接：" + videoUrl);*/
+        
+        Document doc = Jsoup.parse(html);
+        String videoUrl = doc.select("source").first().attr("src");
+        videoResult.setVideoUrl(videoUrl);
         Logger.t(TAG).d("视频链接：" + videoUrl);
 
         int startIndex = videoUrl.lastIndexOf("/");
@@ -243,7 +248,7 @@ public class ParseV9PronVideo {
         Logger.t(TAG).d("视频Id：" + videoId);
 
         //这里解析的作者id已经变了，非纯数字了
-        Document doc = Jsoup.parse(html);
+        //Document doc = Jsoup.parse(html);
         String ownerUrl = doc.select("a[href*=UID]").first().attr("href");
         String ownerId = ownerUrl.substring(ownerUrl.indexOf("=") + 1, ownerUrl.length());
         videoResult.setOwnerId(ownerId);
