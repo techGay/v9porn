@@ -210,31 +210,40 @@ public class ParseV9PronVideo {
             videoResult.setId(VideoResult.OUT_OF_WATCH_TIMES);
             return videoResult;
         }
-
-
+        if (html.contains("视频不存在,可能已经被删除或者被举报为不良内容!")){
+            videoResult.setId(VideoResult.VIDEO_NOT_EXIST_OR_DELETE);
+            return videoResult;
+        }
         final String reg = "document.write\\(strencode\\(\"(.+)\",\"(.+)\",.+\\)\\);";
         Pattern p = Pattern.compile(reg);
         Matcher m = p.matcher(html);
         String param1 = "", param2 = "";
-        if(m.find()){
+        if (m.find()) {
             param1 = m.group(1);
             param2 = m.group(2);
         }
-        param1 = new String(Base64.decode(param1.getBytes(),Base64.DEFAULT));
+        param1 = new String(Base64.decode(param1.getBytes(), Base64.DEFAULT));
         String source_str = "";
-        for (int i = 0,k=0; i<param1.length(); i++) {
+        for (int i = 0, k = 0; i < param1.length(); i++) {
             k = i % param2.length();
-            source_str += ""+(char)(param1.codePointAt(i) ^ param2.codePointAt(k));
+            source_str += "" + (char) (param1.codePointAt(i) ^ param2.codePointAt(k));
         }
         Logger.t(TAG).d("视频source1：" + source_str);
-        source_str = new String(Base64.decode(source_str.getBytes(),Base64.DEFAULT));
+        source_str = new String(Base64.decode(source_str.getBytes(), Base64.DEFAULT));
         Logger.t(TAG).d("视频source2：" + source_str);
 
-//        String videoUrl = doc.select("video").first().select("source").first().attr("src");
-        Document source = Jsoup.parse(source_str);
-        String videoUrl = source.select("source").first().attr("src");
-        videoResult.setVideoUrl(videoUrl);
-        Logger.t(TAG).d("视频链接：" + videoUrl);
+        String videoUrl;
+        if (TextUtils.isEmpty(source_str)) {
+            Logger.t(TAG).d(html);
+            Document doc = Jsoup.parse(html);
+            videoUrl = doc.select("video").first().select("source").first().attr("src");
+        } else {
+            Document source = Jsoup.parse(source_str);
+            videoUrl = source.select("source").first().attr("src");
+            videoResult.setVideoUrl(videoUrl);
+            Logger.t(TAG).d("视频链接：" + videoUrl);
+        }
+
 
         int startIndex = videoUrl.lastIndexOf("/");
         int endIndex = videoUrl.indexOf(".mp4");
@@ -273,9 +282,14 @@ public class ParseV9PronVideo {
         videoResult.setUserOtherInfo(otherInfo);
         Logger.t(TAG).d(otherInfo);
 
-        String thumImg = doc.getElementById("vid").attr("poster");
-        videoResult.setThumbImgUrl(thumImg);
-        Logger.t(TAG).d("缩略图：" + thumImg);
+        try {
+            String thumImg = doc.getElementById("player_one").attr("poster");
+            videoResult.setThumbImgUrl(thumImg);
+            Logger.t(TAG).d("缩略图：" + thumImg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         String videoName = doc.getElementById("viewvideo-title").text();
         videoResult.setVideoName(videoName);
@@ -295,6 +309,7 @@ public class ParseV9PronVideo {
         //新帐号注册成功登录后信息不一样，导致无法解析
         Element element = doc.getElementById("userinfo-title");
         if (element == null) {
+            Logger.t(TAG).d(html);
             user.setLogin(true);
             user.setUserName("无法解析用户信息...");
             return user;
@@ -323,13 +338,17 @@ public class ParseV9PronVideo {
         String userContent = doc.getElementById("userinfo-content").text();
         Logger.t(TAG).d(userContent);
 
-        String lastLoginTime = userContent.substring(userContent.indexOf("最后登录"), userContent.indexOf("IP:"));
-        String lastLoginIP = userContent.substring(userContent.indexOf("IP:"), userContent.indexOf("点此查看"));
-        user.setLastLoginTime(lastLoginTime);
-        user.setLastLoginIP(lastLoginIP);
+        try {
+            String lastLoginTime = userContent.substring(userContent.indexOf("):"), userContent.indexOf("IP:"));
+            String lastLoginIP = userContent.substring(userContent.indexOf("IP:"), userContent.indexOf("我的状态"));
+            user.setLastLoginTime(lastLoginTime);
+            user.setLastLoginIP(lastLoginIP);
 
-        Logger.t(TAG).d(lastLoginTime);
-        Logger.t(TAG).d(lastLoginIP);
+            Logger.t(TAG).d(lastLoginTime);
+            Logger.t(TAG).d(lastLoginIP);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return user;
     }

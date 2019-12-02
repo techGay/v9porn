@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.u9porn.widget.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -15,9 +16,10 @@
         android:id="@+id/tv_num"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:layout_marginBottom="?actionBarSize"
         android:gravity="center"
+        android:text="aljsdlajdlajdlasjdl"
         android:textColor="@color/common_always_white_text_color"
-        android:textSize="18sp" />
-</RelativeLayout>
+        android:textSize="28sp" />
+</com.u9porn.widget.MyFrameLayout>

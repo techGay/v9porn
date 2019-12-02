@@ -23,6 +23,13 @@ public class VideoResult implements Serializable {
      */
     @Transient
     public static final Long OUT_OF_WATCH_TIMES = -1L;
+
+    /**
+     * 视频不存在,可能已经被删除或者被举报为不良内容!
+     */
+    @Transient
+    public static final Long VIDEO_NOT_EXIST_OR_DELETE = -2L;
+
     @Id
     public Long id;
     private String videoUrl;

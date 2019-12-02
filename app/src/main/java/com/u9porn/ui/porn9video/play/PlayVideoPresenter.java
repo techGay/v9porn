@@ -65,6 +65,8 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                             dataManager.resetPorn91VideoWatchTime(true);
                             // Bugsnag.notify(new Throwable(TAG + "Ten videos each day address: " + dataManager.getPorn9VideoAddress()), Severity.WARNING);
                             throw new VideoException("观看次数达到上限了,请更换地址或者代理服务器！");
+                        }else if(VideoResult.VIDEO_NOT_EXIST_OR_DELETE.equals(videoResult.getId())){
+                            throw new VideoException("视频不存在,可能已经被删除或者被举报为不良内容!");
                         } else {
                             throw new VideoException("解析视频链接失败了");
                         }

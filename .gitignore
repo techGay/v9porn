@@ -6,3 +6,6 @@
 /build
 /captures
 .externalNativeBuild
+app/release/output.json
+app/class_files.txt
+app/release/app-release.apk

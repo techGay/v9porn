@@ -1,18 +1,16 @@
 package com.u9porn.ui.images.viewimage;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
+import android.view.GestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -49,6 +47,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
     ProblematicViewPager viewPager;
     @BindView(R.id.tv_num)
     TextView tvNum;
+
     private List<String> imageList;
     private boolean isFullScreen = false;
     private PictureAdapter pictureAdapter;
@@ -56,6 +55,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
 
     @Inject
     protected PictureViewerPresenter pictureViewerPresenter;
+    GestureDetector mGestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
         goFullScreen();
         alertDialog = DialogUtils.initLoadingDialog(this, "解析图片列表中，请稍后...");
         init();
-        initListener();
+        //initListener();
     }
 
     @NonNull
@@ -76,12 +76,12 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
 
     private void init() {
         fixSwipeBack();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//        }
         imageList = getIntent().getStringArrayListExtra(Keys.KEY_INTENT_PICTURE_VIEWER_IMAGE_ARRAY_LIST);
         int currentPosition = getIntent().getIntExtra(Keys.KEY_INTENT_PICTURE_VIEWER_CURRENT_IMAGE_POSITION, 0);
         updateNumberText(currentPosition);
@@ -99,7 +99,9 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
         if (mm99 != null) {
             presenter.list99MmPicture(mm99.getId(), mm99.getContentUrl(), false);
         }
+        // View decorView = getWindow().getDecorView();
     }
+
 
     private void initListener() {
         pictureAdapter.setOnImageClickListener(new PictureAdapter.onImageClickListener() {
@@ -191,35 +193,50 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
 
     protected void goFullScreen() {
         isFullScreen = true;
-        tvNum.setVisibility(View.INVISIBLE);
-        setUiFlags(true);
+        //tvNum.setVisibility(View.VISIBLE);
+        hideSystemUI();
     }
 
     protected void exitFullScreen() {
         isFullScreen = false;
-        tvNum.setVisibility(View.VISIBLE);
-        setUiFlags(false);
+        //tvNum.setVisibility(View.VISIBLE);
+        showSystemUI();
     }
 
-    private void setUiFlags(boolean fullscreen) {
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(fullscreen ? getFullscreenUiFlags() : View.SYSTEM_UI_FLAG_VISIBLE);
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    private int getFullscreenUiFlags() {
-        int flags = View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-
-        flags |= View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            flags |= View.SYSTEM_UI_FLAG_IMMERSIVE;
-        }
-        return flags;
+    // Shows the system bars by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
+
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            hideSystemUI();
+//        }
+//    }
 
     @Override
     public void setStatusBarColor(int color, int statusBarAlpha) {

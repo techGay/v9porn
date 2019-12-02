@@ -1,7 +1,6 @@
 package com.u9porn.adapter;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
@@ -89,23 +88,24 @@ public class PictureAdapter extends PagerAdapter {
         }
         // Now just add PhotoView to ViewPager and return it
         container.addView(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        photoView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onImageClickListener != null) {
-                    onImageClickListener.onImageClick(v, position);
-                }
-            }
-        });
-        photoView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onImageClickListener != null) {
-                    onImageClickListener.onImageLongClick(v, position);
-                }
-                return true;
-            }
-        });
+
+//        photoView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (onImageClickListener != null) {
+//                    onImageClickListener.onImageClick(v, position);
+//                }
+//            }
+//        });
+//        photoView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//                if (onImageClickListener != null) {
+//                    onImageClickListener.onImageLongClick(v, position);
+//                }
+//                return true;
+//            }
+//        });
         Logger.t(TAG).d("instantiateItem");
         return contentView;
     }
