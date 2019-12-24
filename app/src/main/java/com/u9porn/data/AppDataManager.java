@@ -35,6 +35,7 @@ import javax.inject.Singleton;
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author flymegoc
@@ -597,6 +598,16 @@ public class AppDataManager implements DataManager {
     @Override
     public Call<ResponseBody> getPlayVideoUrl(String url) {
         return mApiHelper.getPlayVideoUrl(url);
+    }
+
+    @Override
+    public Observable<Response<ResponseBody>> testV9Porn(String url) {
+        return mApiHelper.testV9Porn(url);
+    }
+
+    @Override
+    public Observable<Response<ResponseBody>> verifyGoogleRecaptcha(String action, String r, String id, String recaptcha) {
+        return mApiHelper.verifyGoogleRecaptcha(action, r, id, recaptcha);
     }
 
     @Override

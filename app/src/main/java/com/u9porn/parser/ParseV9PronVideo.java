@@ -38,6 +38,7 @@ public class ParseV9PronVideo {
      * @return 视频列表
      */
     public static List<V9PornItem> parseIndex(String html) {
+        Logger.t(TAG).d(html);
         List<V9PornItem> v9PornItemList = new ArrayList<>();
         Document doc = Jsoup.parse(html);
         Element body = doc.getElementById("tab-featured");
@@ -47,20 +48,20 @@ public class ParseV9PronVideo {
 
             String title = element.getElementsByClass("title").first().text();
             v9PornItem.setTitle(title);
-            // Logger.d(title);
+            Logger.d(title);
 
             String imgUrl = element.select("img").first().attr("src");
             v9PornItem.setImgUrl(imgUrl);
-            // Logger.d(imgUrl);
+            Logger.d(imgUrl);
 
             String duration = element.getElementsByClass("duration").first().text();
             v9PornItem.setDuration(duration);
-            //Logger.d(duration);
+            Logger.d(duration);
 
             String contentUrl = element.select("a").first().attr("href");
             String viewKey = contentUrl.substring(contentUrl.indexOf("=") + 1);
             v9PornItem.setViewKey(viewKey);
-            // Logger.d(viewKey);
+            Logger.d(viewKey);
 
             String allInfo = element.text();
             int start = allInfo.indexOf("添加时间");
@@ -210,7 +211,7 @@ public class ParseV9PronVideo {
             videoResult.setId(VideoResult.OUT_OF_WATCH_TIMES);
             return videoResult;
         }
-        if (html.contains("视频不存在,可能已经被删除或者被举报为不良内容!")){
+        if (html.contains("视频不存在,可能已经被删除或者被举报为不良内容!")) {
             videoResult.setId(VideoResult.VIDEO_NOT_EXIST_OR_DELETE);
             return videoResult;
         }

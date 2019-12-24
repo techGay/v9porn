@@ -40,6 +40,7 @@
     <string name="playback_engine">播放引擎</string>
     <string name="address_v9porn">设置9*PORN视频地址</string>
     <string name="address_forum_9porn">设置9*PORN论坛地址</string>
+    <string name="google_recaptcha_verify">Google机器人验证</string>
     <string name="address_t6y">设置CaoLiu地址</string>
     <string name="address_pa">设置P*gav视频地址</string>
     <string name="about_item_clean_cache">清除缓存</string>

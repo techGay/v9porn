@@ -5,4 +5,5 @@
     <item name="setting_item_9_porn_address" type="id" />
     <item name="setting_item_9_porn_forum_address" type="id" />
     <item name="setting_item_t6y_forum_address" type="id" />
+    <item name="setting_item_google_recaptcha_verify" type="id" />
 </resources>

@@ -2,7 +2,6 @@ package com.u9porn.data.network.okhttp;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 import com.u9porn.data.network.Api;
@@ -12,6 +11,7 @@ import com.u9porn.eventbus.UrlRedirectEvent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -38,6 +38,7 @@ public class CommonHeaderInterceptor implements Interceptor {
         this.preferencesHelper = preferencesHelper;
     }
 
+    @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         //统一设置请求头
@@ -45,7 +46,7 @@ public class CommonHeaderInterceptor implements Interceptor {
         String header = original.header("Domain-Name");
 
         //如果是可能被重定向的header
-        if (!TextUtils.isEmpty(header) && header.equals(Api.PORN9_VIDEO_DOMAIN_NAME)) {
+        if (!TextUtils.isEmpty(header) && Objects.equals(header, Api.PORN9_VIDEO_DOMAIN_NAME)) {
             //返回的地址
             Response response = chain.proceed(original);
             HttpUrl httpUrl = response.request().url();
@@ -63,7 +64,7 @@ public class CommonHeaderInterceptor implements Interceptor {
                     EventBus.getDefault().post(new UrlRedirectEvent(url, urlStr, Api.PORN9_VIDEO_DOMAIN_NAME));
                 }
             }
-        } else if (!TextUtils.isEmpty(header) && header.equals(Api.PORN9_FORUM_DOMAIN_NAME)) {
+        } else if (!TextUtils.isEmpty(header) && Objects.equals(header, Api.PORN9_FORUM_DOMAIN_NAME)) {
             //返回的地址
             Response response = chain.proceed(original);
             HttpUrl httpUrl = response.request().url();
@@ -84,7 +85,7 @@ public class CommonHeaderInterceptor implements Interceptor {
         }
 
         Request.Builder requestBuilder = original.newBuilder();
-        requestBuilder.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.84 Safari/537.36");
+        requestBuilder.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36");
         requestBuilder.header("Accept-Language", "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5");
         requestBuilder.header("Proxy-Connection", "keep-alive");
         requestBuilder.header("Cache-Control", "max-age=0");

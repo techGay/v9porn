@@ -9,12 +9,12 @@ import com.u9porn.ui.axgle.search.SearchAxgleVideoActivity;
 import com.u9porn.ui.axgle.search.SearchAxgleVideoActivityModule;
 import com.u9porn.ui.download.DownloadActivity;
 import com.u9porn.ui.download.DownloadActivityModule;
+import com.u9porn.ui.google.GoogleRecaptchaVerifyActivity;
+import com.u9porn.ui.google.GoogleRecaptchaVerifyActivityModule;
 import com.u9porn.ui.images.viewimage.PictureViewerActivity;
 import com.u9porn.ui.images.viewimage.PictureViewerActivityModule;
 import com.u9porn.ui.main.MainActivity;
 import com.u9porn.ui.main.MainActivityModule;
-import com.u9porn.ui.pxgav.playpxgav.PlayPxgavActivity;
-import com.u9porn.ui.pxgav.playpxgav.PlayPxgavActivityModule;
 import com.u9porn.ui.porn9forum.browse9forum.Browse9PForumActivity;
 import com.u9porn.ui.porn9forum.browse9forum.Browse9PForumActivityModule;
 import com.u9porn.ui.porn9video.author.AuthorActivity;
@@ -23,8 +23,8 @@ import com.u9porn.ui.porn9video.favorite.FavoriteActivity;
 import com.u9porn.ui.porn9video.favorite.FavoriteActivityModule;
 import com.u9porn.ui.porn9video.history.HistoryActivity;
 import com.u9porn.ui.porn9video.history.HistoryActivityModule;
-import com.u9porn.ui.porn9video.play.ExoPlayerVideoModule;
 import com.u9porn.ui.porn9video.play.ExoMediaPlayerActivity;
+import com.u9porn.ui.porn9video.play.ExoPlayerVideoModule;
 import com.u9porn.ui.porn9video.play.JiaoZiVideoPlayerActivity;
 import com.u9porn.ui.porn9video.play.JiaoZiVideoPlayerModule;
 import com.u9porn.ui.porn9video.search.SearchActivity;
@@ -35,6 +35,8 @@ import com.u9porn.ui.porn9video.user.UserRegisterActivity;
 import com.u9porn.ui.porn9video.user.UserRegisterActivityModule;
 import com.u9porn.ui.proxy.ProxySettingActivity;
 import com.u9porn.ui.proxy.ProxySettingActivityModule;
+import com.u9porn.ui.pxgav.playpxgav.PlayPxgavActivity;
+import com.u9porn.ui.pxgav.playpxgav.PlayPxgavActivityModule;
 import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.ui.setting.SettingActivityModule;
 import com.u9porn.ui.splash.SplashActivity;
@@ -112,6 +114,10 @@ public abstract class ActivityBindingModule {
     @PerActivity
     @ContributesAndroidInjector(modules = Browse9PForumActivityModule.class)
     abstract Browse9PForumActivity browse9PForumActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = GoogleRecaptchaVerifyActivityModule.class)
+    abstract GoogleRecaptchaVerifyActivity googleRecaptchaVerifyActivity();
 
     @PerActivity
     @ContributesAndroidInjector(modules = HistoryActivityModule.class)

@@ -9,7 +9,6 @@ import com.u9porn.data.DataManager;
 import com.u9porn.data.model.F9PornContent;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
-import com.u9porn.utils.AppUtils;
 
 import javax.inject.Inject;
 
@@ -35,8 +34,8 @@ public class Browse9Presenter extends MvpBasePresenter<Browse9View> implements I
     public void loadContent(Long tid) {
         final boolean isNightModel = dataManager.isOpenNightMode();
         dataManager.loadPorn9ForumContent(tid, isNightModel)
-                .compose(RxSchedulersHelper.<F9PornContent>ioMainThread())
-                .compose(provider.<F9PornContent>bindUntilEvent(Lifecycle.Event.ON_DESTROY))
+                .compose(RxSchedulersHelper.ioMainThread())
+                .compose(provider.bindUntilEvent(Lifecycle.Event.ON_DESTROY))
                 .subscribe(new CallBackWrapper<F9PornContent>() {
 
                     @Override

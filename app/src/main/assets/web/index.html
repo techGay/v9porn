@@ -4,14 +4,40 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="js/md5.js"></script>
+    <script src="js/ajaxhook.min.js"></script>
 </head>
 <body>
 <script type="text/javascript">
+
         function parserVideoUrl(data1,data2) {
 
-            var videoUrl=strencode(data1,data2);
+            var textA = document.getElementById('g-recaptcha-response').innerHTML
+            if(textA){
+                return textA;
+            }
+            return "哈哈哈";
+        }
 
-            return videoUrl;
+    </script>
+<script type="text/javascript">
+
+        function getActionUrl(){
+            let action=document.getElementById('challenge-form').getAttribute("action");
+            return action;
+        }
+
+        function getR(){
+            let r= document.getElementsByName("r")[0].getAttribute("value");
+            return r;
+        }
+
+         function getId(){
+            let id=document.getElementById('id').getAttribute("value");
+            return id;
+         }
+
+        function setArea(){
+            document.getElementById("g-recaptcha-response").attr("style", "width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px;");
         }
     </script>
 </body>

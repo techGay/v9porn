@@ -6,8 +6,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializer;
 import com.orhanobut.logger.Logger;
 import com.u9porn.BuildConfig;
+import com.u9porn.eventbus.NeedCheckGoogleRecaptchaEvent;
 
 import org.apache.http.conn.ConnectTimeoutException;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.DaoException;
 import org.json.JSONException;
 
@@ -73,6 +75,10 @@ public class ApiException extends Exception {
             HttpException httpException = (HttpException) e;
             ex = new ApiException(httpException, httpException.code());
             ex.message = httpException.getMessage();
+            //如果是403，尝试让用户手动验证
+            if (httpException.code() == 403) {
+                EventBus.getDefault().post(new NeedCheckGoogleRecaptchaEvent());
+            }
             return ex;
         } else if (e instanceof JsonParseException
                 || e instanceof JSONException

@@ -4,6 +4,7 @@ import com.u9porn.data.network.Api;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -11,6 +12,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * @author flymegoc
@@ -64,6 +66,7 @@ public interface V9PornServiceApi {
     @Headers({"Domain-Name: " + Api.PORN9_VIDEO_DOMAIN_NAME})
     @GET("captcha.php")
     Observable<ResponseBody> captcha();
+
     /**
      * @param username     用户名
      * @param password     密码
@@ -215,4 +218,30 @@ public interface V9PornServiceApi {
     @Headers({"Domain-Name: " + Api.PORN9_VIDEO_DOMAIN_NAME})
     @GET("/uvideos.php")
     Observable<String> authorVideos(@Query("UID") String uid, @Query("type") String type, @Query("page") int page);
+
+    /**
+     * 测试是否能连接
+     *
+     * @param url 链接
+     * @return ob
+     */
+
+    @GET
+    @Headers({"Domain-Name: " + Api.PORN9_VIDEO_DOMAIN_NAME})
+    Observable<Response<ResponseBody>> testV9Porn(@Url String url);
+
+
+    /**
+     * 提交google人机验证结果
+     *
+     * @param action    form action url
+     * @param r         r
+     * @param id        clf id
+     * @param recaptcha token
+     * @return ob
+     */
+    @POST
+    @FormUrlEncoded
+    @Headers({"Domain-Name: " + Api.PORN9_VIDEO_DOMAIN_NAME})
+    Observable<Response<ResponseBody>> verifyGoogleRecaptcha(@Url String action, @Field("r") String r, @Field("id") String id, @Field("g-recaptcha-response") String recaptcha);
 }

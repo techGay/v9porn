@@ -57,7 +57,6 @@ import com.u9porn.utils.Tags;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -115,7 +114,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         NotificationChannelHelper.initChannel(this);
-        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         firstTagsArray.add(Tags.TAG_SEARCH_PORN_AXGLE_VIDEO);
         firstTagsArray.add(Tags.TAG_MY_DOWNLOAD);
@@ -629,7 +627,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 

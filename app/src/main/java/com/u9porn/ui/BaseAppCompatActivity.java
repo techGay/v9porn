@@ -16,7 +16,13 @@ import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.constants.Keys;
 import com.u9porn.data.db.entity.V9PornItem;
+import com.u9porn.eventbus.NeedCheckGoogleRecaptchaEvent;
+import com.u9porn.ui.google.GoogleRecaptchaVerifyActivity;
 import com.u9porn.utils.PlaybackEngine;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 import dagger.android.support.DaggerAppCompatActivity;
@@ -38,6 +44,7 @@ public abstract class BaseAppCompatActivity extends DaggerAppCompatActivity impl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         initSwipeBackFinish();
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         context = this;
     }
 
@@ -50,6 +57,18 @@ public abstract class BaseAppCompatActivity extends DaggerAppCompatActivity impl
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void checkGoogleRecaptcha(NeedCheckGoogleRecaptchaEvent needCheckGoogleRecaptchaEvent) {
+        if (needGoToCheckGoogleRecaptcha()) {
+            Intent intent = new Intent(this, GoogleRecaptchaVerifyActivity.class);
+            startActivityWithAnimation(intent);
+        }
+    }
+
+    protected boolean needGoToCheckGoogleRecaptcha() {
+        return true;
     }
 
     /**
@@ -115,6 +134,7 @@ public abstract class BaseAppCompatActivity extends DaggerAppCompatActivity impl
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -165,7 +185,7 @@ public abstract class BaseAppCompatActivity extends DaggerAppCompatActivity impl
     /**
      * 设置状态栏颜色
      *
-     * @param color color
+     * @param color          color
      * @param statusBarAlpha 透明度
      */
     public void setStatusBarColor(@ColorInt int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {

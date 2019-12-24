@@ -2,29 +2,30 @@ package com.u9porn.data.network;
 
 import android.graphics.Bitmap;
 
+import com.u9porn.data.db.entity.V9PornItem;
+import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.model.BaseResult;
+import com.u9porn.data.model.F9PornContent;
 import com.u9porn.data.model.F9PronItem;
 import com.u9porn.data.model.HuaBan;
 import com.u9porn.data.model.MeiZiTu;
 import com.u9porn.data.model.Mm99;
 import com.u9porn.data.model.Notice;
-import com.u9porn.data.model.pxgav.PxgavResultWithBlockId;
-import com.u9porn.data.model.pxgav.PxgavVideoParserJsonResult;
 import com.u9porn.data.model.PinnedHeaderEntity;
-import com.u9porn.data.model.F9PornContent;
 import com.u9porn.data.model.ProxyModel;
-import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.data.model.User;
 import com.u9porn.data.model.VideoComment;
-import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.model.axgle.AxgleResponse;
+import com.u9porn.data.model.pxgav.PxgavResultWithBlockId;
+import com.u9porn.data.model.pxgav.PxgavVideoParserJsonResult;
 
 import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * @author flymegoc
@@ -111,4 +112,8 @@ public interface ApiHelper {
     Observable<AxgleResponse> searchAxgleJavVideo(String keyWord, int page);
 
     Call<ResponseBody> getPlayVideoUrl(String url);
+
+    Observable<Response<ResponseBody>> testV9Porn(String url);
+
+    Observable<Response<ResponseBody>> verifyGoogleRecaptcha(String action, String r, String id, String recaptcha);
 }
