@@ -1,10 +1,8 @@
 {
-"apkDownloadUrl": "https://cdn.jsdelivr.net/gh/techGay/v9porn@master/apk/v9porn-v1.2.3.apk",
+"apkDownloadUrl": "https://raw.githubusercontent.com/techGay/v9porn/master/apk/v9porn-v1.2.4.apk",
 "updateMessage": "
-1. 修复妹子图继续错误问题\n
-2. 修复p*gav视频播放问题\n
-3. 修复a*gle换了验证之后窗口太小无法验证问题
+1. 小修\n
 ",
-"versionCode": 24,
-"versionName": "1.2.3"
+"versionCode": 25,
+"versionName": "1.2.4"
 }
